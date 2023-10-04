@@ -1,11 +1,11 @@
 app/driver/com/modbus.o: ../app/driver/com/modbus.c \
  ../app/driver/com/modbus.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/serial/serial.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/common/common.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/common/fifo.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/pin_func.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/gpio/gpio.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/common/common.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/common/fifo.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/types.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/control/pin_func.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/gpio/gpio.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -39,12 +39,12 @@ app/driver/com/modbus.o: ../app/driver/com/modbus.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 ../app/driver/com/modbus.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/serial/serial.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/common/common.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/common/fifo.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/pin_func.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/gpio/gpio.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h:
+D:/7.GITHUB/WIND_G431/Wind/app/common/common.h:
+D:/7.GITHUB/WIND_G431/Wind/app/common/fifo.h:
+D:/7.GITHUB/WIND_G431/Wind/app/types.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/control/pin_func.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/gpio/gpio.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h:

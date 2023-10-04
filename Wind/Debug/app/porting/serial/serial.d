@@ -1,9 +1,9 @@
 app/porting/serial/serial.o: ../app/porting/serial/serial.c \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/serial/serial.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/common/common.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/common/fifo.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h \
- ../Core/Inc/main.h ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/common/common.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/common/fifo.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/types.h ../Core/Inc/main.h \
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h \
@@ -45,11 +45,19 @@ app/porting/serial/serial.o: ../app/porting/serial/serial.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_gpio.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dma.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dmamux.h \
- ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/serial/serial.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/common/common.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/common/fifo.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h:
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_uart.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/src/interface.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/control/pin_func.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/gpio/gpio.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/measure/signal.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/adc/adc.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/src/wind_mppt.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h
+D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h:
+D:/7.GITHUB/WIND_G431/Wind/app/common/common.h:
+D:/7.GITHUB/WIND_G431/Wind/app/common/fifo.h:
+D:/7.GITHUB/WIND_G431/Wind/app/types.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -94,3 +102,11 @@ D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dma.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dmamux.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h:
+D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_uart.h:
+D:/7.GITHUB/WIND_G431/Wind/app/src/interface.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/control/pin_func.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/gpio/gpio.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/measure/signal.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/adc/adc.h:
+D:/7.GITHUB/WIND_G431/Wind/app/src/wind_mppt.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h:

@@ -1,3 +1,4 @@
-../app/src/interface.c:20:6:serial_init	1
-../app/src/interface.c:24:6:initGlobalVariables	1
-../app/src/interface.c:29:6:UpdateAllVariable	1
+../app/src/interface.c:21:6:serial_init	1
+../app/src/interface.c:25:6:initGlobalVariables	1
+../app/src/interface.c:30:6:UpdateAllVariable	1
+../app/src/interface.c:57:6:TEST	2

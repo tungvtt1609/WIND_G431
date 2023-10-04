@@ -12,6 +12,7 @@
 #include "state_machine.h"
 #include "string.h"
 #include "serial/serial.h"
+#include "lib/EC200_application.h"
 
 extern serial_obj *serial_test_1;
 volatile ManagerVariable g_guiValue;
@@ -44,5 +45,20 @@ void UpdateAllVariable(void){
 //	g_guiValue.guiDref 	= 1;
 //	g_guiValue.guiErrCode = 6;
 //	g_guiValue.guiStatus = 7;
+}
+
+battery_data_t BAT_DAT = {
+	5,
+	1,
+	3
+};
+
+
+void TEST(void){
+	if(EC200_MQTT_ConnectToServer()){
+		MQTT_Transmit_Data(&BAT_DAT, BATTERY_DATA);
+		Pin_Func_TurnOff(LED1);
+	}
+	HAL_Delay(500);
 }
 

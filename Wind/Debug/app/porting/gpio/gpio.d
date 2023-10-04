@@ -1,6 +1,5 @@
 app/porting/gpio/gpio.o: ../app/porting/gpio/gpio.c \
- ../app/porting/gpio/gpio.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h \
+ ../app/porting/gpio/gpio.h D:/7.GITHUB/WIND_G431/Wind/app/types.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -34,7 +33,7 @@ app/porting/gpio/gpio.o: ../app/porting/gpio/gpio.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 ../app/porting/gpio/gpio.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h:
+D:/7.GITHUB/WIND_G431/Wind/app/types.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h:

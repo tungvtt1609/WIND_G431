@@ -1,0 +1,8 @@
+../app/lib/EC200_JSON_parsing.c:32:19:jsmn_alloc_token	2
+../app/lib/EC200_JSON_parsing.c:51:13:jsmn_fill_token	1
+../app/lib/EC200_JSON_parsing.c:62:12:jsmn_parse_primitive	17
+../app/lib/EC200_JSON_parsing.c:124:12:jsmn_parse_string	23
+../app/lib/EC200_JSON_parsing.c:206:5:jsmn_parse	52
+../app/lib/EC200_JSON_parsing.c:419:6:jsmn_init	1
+../app/lib/EC200_JSON_parsing.c:432:5:jsoneq	4
+../app/lib/EC200_JSON_parsing.c:442:6:parse_JSON	7

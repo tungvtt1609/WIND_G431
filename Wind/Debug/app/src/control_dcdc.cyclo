@@ -1,6 +1,6 @@
-D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:45:22:SetCompareCH1	1
-D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:55:22:SetCompareCH2	1
-D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:76:22:SetCompareCH4	1
+D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h:45:22:SetCompareCH1	1
+D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h:55:22:SetCompareCH2	1
+D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h:76:22:SetCompareCH4	1
 ../app/src/control_dcdc.c:42:6:ControlDcDcBuckInit	1
 ../app/src/control_dcdc.c:48:6:ControlDcDcBoostInit	1
 ../app/src/control_dcdc.c:56:13:DcDcProcess	1

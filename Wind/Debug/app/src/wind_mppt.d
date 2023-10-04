@@ -1,8 +1,8 @@
 app/src/wind_mppt.o: ../app/src/wind_mppt.c ../app/src/wind_mppt.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/measure/signal.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/adc/adc.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/types.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/measure/signal.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/adc/adc.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h \
  ../Core/Inc/main.h ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -46,14 +46,14 @@ app/src/wind_mppt.o: ../app/src/wind_mppt.c ../app/src/wind_mppt.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dma.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dmamux.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/driver_pwm_dc_dc.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/driver_pwm_dumpload.h
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/control/driver_pwm_dc_dc.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/control/driver_pwm_dumpload.h
 ../app/src/wind_mppt.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/measure/signal.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/adc/adc.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:
+D:/7.GITHUB/WIND_G431/Wind/app/types.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/measure/signal.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/adc/adc.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -98,6 +98,6 @@ D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dma.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dmamux.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/driver_pwm_dc_dc.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/driver_pwm_dumpload.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/control/driver_pwm_dc_dc.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/control/driver_pwm_dumpload.h:

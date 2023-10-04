@@ -3,9 +3,9 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "serial.h"
+#include "serial/serial.h"
 #include "interface.h"
-#include "pin_func.h"
+#include "driver/control/pin_func.h"
 
 #if defined(__cplusplus)
 extern "C"

@@ -9,6 +9,7 @@
 #define SRC_APP_MAIN_H_
 
 #include "driver/com/modbus.h"
+#include "lib/EC200_application.h"
 
 #define MAX_BACKGOUND_TASK	6
 typedef void (*BackgroundCb)(void);

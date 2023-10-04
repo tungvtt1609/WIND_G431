@@ -17,6 +17,7 @@
 #include "porting/timer/timer.h"
 #include "driver/com/modbus.h"
 
+
 modbus_master_obj* debug_modbus;
 serial_obj *serial_test_1;
 serial_obj *serial_test_2;
@@ -32,17 +33,19 @@ void AppMainInit(){
 		serial_init();
 //	  	serial_test_1 = create_serial(1, 115200, 512, 512);
 		debug_modbus = create_modbus(118, serial_test_1);
+		EC200_Init();
 		initGlobalVariables();
 		MainAddBackgroundProcess(&ModbusBackground);
 		MainAddBackgroundProcess(&UpdateAllVariable);
 
-//		MainAddBackgroundProcess(&send_data);
+//		MainAddBackgroundProcess(&TEST);
 //		send_data();
 //		MainAddBackgroundProcess(&receive_string_data);
 		Timer1kHzAddCallback(&Modbus1kHz);
+
 		Pin_Func_Init();
 		Signal_Init();
-//		ControlDcDcBoostInit();
+		ControlDcDcBoostInit();
 //		ControlDcDcBuckInit();
 //		ControlDcDcDumpInit();
 		StateInit();

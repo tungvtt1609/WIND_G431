@@ -70,19 +70,19 @@ typedef enum
 /* MQTT transferring data structs */
 typedef struct
 {
-    uint16_t capacity; //cap(Ah) 
-    uint16_t over_voltage; //ov_vol(Vol)
-    uint16_t under_voltage; //ud_vol(Vol)
+    float capacity; //cap(Ah)
+    float over_voltage; //ov_vol(Vol)
+    float under_voltage; //ud_vol(Vol)
 
 }battery_data_t;
 
 typedef struct
 {
-    uint16_t max_voltage; //max_vol(Vol)
-    uint16_t max_current; //max_cur(Ampe)
+	float max_voltage; //max_vol(Vol)
+	float max_current; //max_cur(Ampe)
     char generator_pole[100]; //pole
-    uint16_t start_charging_voltage; //chrg_vol(Vol)
-    uint16_t max_rotate_speed; //max_spd(rpm)
+    float start_charging_voltage; //chrg_vol(Vol)
+    float max_rotate_speed; //max_spd(rpm)
 }wind_data_t;
 
 typedef struct

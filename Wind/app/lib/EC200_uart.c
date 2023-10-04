@@ -1,4 +1,5 @@
 #include "EC200_uart.h"
+#include "serial/serial.h"
 
 uint8_t MQTT_DataProcessing_Array[COMMAND_SIZE];
 
@@ -7,7 +8,7 @@ uint8_t MQTT_Response_Server[COMMAND_SIZE];
 
 /* Extern variables */
 extern bool Is_Data_From_Server;
-extern serial_obj *serial_EC200;
+serial_obj *serial_EC200;
 
 /*******************************************************************************
  * Variables
@@ -30,7 +31,6 @@ void EC200_UART_Init(void)
     EC200_UART_InitPins();
     /* Configure EC200-RESET Pins */
     EC200_RESET_InitPins();
-
     serial_EC200 = create_serial(0, EC200_UART_BAUDRATE, 64, 64); /* Data size=64 can be modified later */
 }
 

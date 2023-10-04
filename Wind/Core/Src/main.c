@@ -123,6 +123,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	AppMainProcess();
+	TEST();
 //	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 //	HAL_Delay(100);
 //	Pin_Func_Toggle(LED1);
@@ -631,11 +632,11 @@ static void MX_USART2_UART_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_8_8) != HAL_OK)
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_UARTEx_EnableFifoMode(&huart2) != HAL_OK)
+  if (HAL_UARTEx_DisableFifoMode(&huart2) != HAL_OK)
   {
     Error_Handler();
   }

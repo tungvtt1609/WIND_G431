@@ -78,10 +78,6 @@ void Error_Handler(void);
 #define ADC1_IN1_VOUT_GPIO_Port GPIOA
 #define ADC1_IN2_TEMP2_Pin GPIO_PIN_1
 #define ADC1_IN2_TEMP2_GPIO_Port GPIOA
-#define TX_LCD_Pin GPIO_PIN_2
-#define TX_LCD_GPIO_Port GPIOA
-#define RX_LCD_Pin GPIO_PIN_3
-#define RX_LCD_GPIO_Port GPIOA
 #define ADC2_IN13_IDUMP_Pin GPIO_PIN_5
 #define ADC2_IN13_IDUMP_GPIO_Port GPIOA
 #define ADC2_IN3_VIN_Pin GPIO_PIN_6

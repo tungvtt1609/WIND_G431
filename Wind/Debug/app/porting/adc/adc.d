@@ -1,5 +1,5 @@
 app/porting/adc/adc.o: ../app/porting/adc/adc.c ../app/porting/adc/adc.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/types.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -33,7 +33,7 @@ app/porting/adc/adc.o: ../app/porting/adc/adc.c ../app/porting/adc/adc.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 ../app/porting/adc/adc.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h:
+D:/7.GITHUB/WIND_G431/Wind/app/types.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h:

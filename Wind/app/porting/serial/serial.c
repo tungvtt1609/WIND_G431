@@ -7,7 +7,7 @@
 
 #include <serial/serial.h>
 #include "main.h"
-#include "EC200_uart.h"
+#include "lib/EC200_uart.h"
 
 #define USE_FIFO
 
@@ -47,7 +47,7 @@ static uint8_t uart3_data_rx_isr_buff[2];
 #endif
 
 static stm_uart_obj uart_list[DEV_SERIAL] = {
-	{{0, 9600, 0, 0, 0}, 1, &OpenUart2, &SendByteUart2, &ReceiveByteUart2, null, null},
+	{{0, EC200_UART_BAUDRATE, 0, 0, 0}, 1, &OpenUart2, &SendByteUart2, &ReceiveByteUart2, null, null},
 	{{1, 9600, 0, 0, 0}, 1, &OpenUart3, &SendByteUart3, &ReceiveByteUart3, null, null}};
 
 /*=============================================================UART 2=====================================================================*/

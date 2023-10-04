@@ -1,8 +1,8 @@
 app/src/state_machine.o: ../app/src/state_machine.c \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/pin_func.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/gpio/gpio.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/types.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/control/pin_func.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/gpio/gpio.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -35,13 +35,13 @@ app/src/state_machine.o: ../app/src/state_machine.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/measure/signal.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/adc/adc.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/measure/signal.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/adc/adc.h \
  ../app/src/state_machine.h ../app/src/error_check.h \
  ../app/src/wind_control.h ../app/src/wind_mppt.h \
  ../app/src/config_parameter.h ../app/src/control_dcdc.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/driver_pwm_dc_dc.h \
- D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/driver/control/driver_pwm_dc_dc.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h \
  ../Core/Inc/main.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_tim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_bus.h \
@@ -55,10 +55,10 @@ app/src/state_machine.o: ../app/src/state_machine.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dmamux.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h \
  ../app/src/control_dumpload.h
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/types.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/pin_func.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/gpio/gpio.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer.h:
+D:/7.GITHUB/WIND_G431/Wind/app/types.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/control/pin_func.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/gpio/gpio.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h:
@@ -91,16 +91,16 @@ D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/gpio/gpio.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/measure/signal.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/adc/adc.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/measure/signal.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/adc/adc.h:
 ../app/src/state_machine.h:
 ../app/src/error_check.h:
 ../app/src/wind_control.h:
 ../app/src/wind_mppt.h:
 ../app/src/config_parameter.h:
 ../app/src/control_dcdc.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/driver/control/driver_pwm_dc_dc.h:
-D:/2.WORK/VMC/Wind\ turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:
+D:/7.GITHUB/WIND_G431/Wind/app/driver/control/driver_pwm_dc_dc.h:
+D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_tim.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_bus.h:

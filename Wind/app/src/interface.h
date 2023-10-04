@@ -43,5 +43,6 @@ void initGlobalVariables(void);
 void UpdateAllVariable(void);
 void INF_Process(void);
 void INF_Time1kHz(void);
+void TEST(void);
 
 #endif /* SRC_INTERFACE_H_ */

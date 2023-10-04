@@ -1,0 +1,2 @@
+../app/src/test_sensor.c:29:6:speed_info	8	static
+../app/src/test_sensor.c:36:6:response_process	24	static

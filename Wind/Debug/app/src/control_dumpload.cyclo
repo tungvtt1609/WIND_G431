@@ -1,4 +1,4 @@
-D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:55:22:SetCompareCH2	1
+D:/7.GITHUB/WIND_G431/Wind/app/porting/timer/timer_pwm.h:55:22:SetCompareCH2	1
 ../app/src/control_dumpload.c:17:6:ControlDcDcDumpInit	1
 ../app/src/control_dumpload.c:23:6:Start_PWM_Dumpload	1
 ../app/src/control_dumpload.c:28:6:Stop_PWM_Dumpload	1
