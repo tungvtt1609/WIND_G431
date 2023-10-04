@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "serial.h": "c",
+        "app_main.h": "c",
+        "main.h": "c",
+        "ec200_uart.h": "c",
+        "common.h": "c",
+        "fifo.h": "c",
+        "ec200_application.h": "c",
+        "ec200_json_parsing.h": "c",
+        "interface.h": "c"
+    }
+}

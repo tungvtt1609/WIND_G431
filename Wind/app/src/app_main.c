@@ -19,6 +19,7 @@
 
 modbus_master_obj* debug_modbus;
 serial_obj *serial_test_1;
+serial_obj *serial_test_2;
 
 
 static BackgroundCb BackgroundTask[MAX_BACKGOUND_TASK] = {NULL};

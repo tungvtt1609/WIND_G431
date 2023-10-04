@@ -13,6 +13,8 @@ pin_func_t pin_func_list[PIN_FUNC_MAX] = {
 		{LED3	, 				PORT_C, 		PIN_15, 		OUTPUT, 		GPIO_HIGH		},
 		{BUZZ	, 				PORT_A, 		PIN_12, 		OUTPUT, 		GPIO_LOW		},
 		{CONTROL_485, 			PORT_B, 		PIN_12, 		OUTPUT, 		GPIO_HIGH		},
+		{RESET_4G	, 			PORT_B, 		PIN_13, 		OUTPUT, 		GPIO_LOW		},
+		{POWER_4G, 			    PORT_B, 		PIN_9, 		    OUTPUT, 		GPIO_LOW		},
 };
 
 void Pin_Func_Init(void)

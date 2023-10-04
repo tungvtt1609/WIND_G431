@@ -25,7 +25,7 @@ typedef struct serial_obj
     uint16_t length_received;
     uint16_t length_send;
 }serial_obj;
-
+void SendStringUart2(uint8_t *dat);
 serial_obj* create_serial(uint16_t port, uint32_t baudrate, uint16_t tx_size, uint16_t rx_size);
 bool SerialSendBuf(struct serial_obj* serial, uint8_t *data, uint16_t len);
 uint16_t SerialReadBuf(struct serial_obj* serial, uint8_t *data, uint16_t len);
