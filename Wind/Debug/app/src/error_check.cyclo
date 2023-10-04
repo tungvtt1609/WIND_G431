@@ -1,0 +1,5 @@
+../app/src/error_check.c:101:6:ErrorCheckInit	2
+../app/src/error_check.c:114:6:ErrorCheck_Running	20
+../app/src/error_check.c:186:13:UpdateCalc	1
+../app/src/error_check.c:196:12:getFaultInfo	5
+../app/src/error_check.c:208:6:SetErr	1

@@ -1,0 +1,5 @@
+../app/src/error_check.c:101:6:ErrorCheckInit	4	static
+../app/src/error_check.c:114:6:ErrorCheck_Running	8	static
+../app/src/error_check.c:186:13:UpdateCalc	4	static
+../app/src/error_check.c:196:12:getFaultInfo	16	static
+../app/src/error_check.c:208:6:SetErr	16	static

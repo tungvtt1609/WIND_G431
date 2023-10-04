@@ -1,0 +1,9 @@
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:55:22:SetCompareCH2	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:86:22:DisableTimerChanel	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:90:22:EnableTimerChanel	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:108:22:EnableCH2Output	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:158:22:DisableCH2Output	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:195:22:EnableCntTimer	1
+../app/driver/control/driver_pwm_dumpload.c:11:6:PwmWindDumpLoadInit	1
+../app/driver/control/driver_pwm_dumpload.c:26:6:PwmWindDumpLoadEnableOutput	1
+../app/driver/control/driver_pwm_dumpload.c:32:6:PwmWindDumpLoadDisableOutput	1

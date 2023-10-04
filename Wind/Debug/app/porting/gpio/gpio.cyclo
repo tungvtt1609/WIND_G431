@@ -1,0 +1,5 @@
+../app/porting/gpio/gpio.c:41:6:GPIO_SetPinOut	1
+../app/porting/gpio/gpio.c:53:6:GPIO_SetPinIn	1
+../app/porting/gpio/gpio.c:64:6:GPIO_WritePin	1
+../app/porting/gpio/gpio.c:68:12:GPIO_ReadPin	1
+../app/porting/gpio/gpio.c:72:6:GPIO_TogglePin	1

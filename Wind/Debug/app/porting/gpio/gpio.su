@@ -1,0 +1,5 @@
+../app/porting/gpio/gpio.c:41:6:GPIO_SetPinOut	40	static
+../app/porting/gpio/gpio.c:53:6:GPIO_SetPinIn	40	static
+../app/porting/gpio/gpio.c:64:6:GPIO_WritePin	16	static
+../app/porting/gpio/gpio.c:68:12:GPIO_ReadPin	16	static
+../app/porting/gpio/gpio.c:72:6:GPIO_TogglePin	16	static

@@ -1,0 +1,3 @@
+../app/src/interface.c:20:6:serial_init	1
+../app/src/interface.c:24:6:initGlobalVariables	1
+../app/src/interface.c:29:6:UpdateAllVariable	1

@@ -1,0 +1,3 @@
+../app/src/app_main.c:29:6:AppMainInit	1
+../app/src/app_main.c:52:6:AppMainProcess	3
+../app/src/app_main.c:61:13:MainAddBackgroundProcess	2

@@ -1,0 +1,3 @@
+../app/porting/timer/timer_pwm.h:225:26:TIM_GetCounterMode	24	static
+../app/porting/timer/timer_pwm.h:233:22:TIM_SetAutoReload	16	static
+../app/porting/timer/timer_pwm.c:25:22:create_advance_timer	24	static

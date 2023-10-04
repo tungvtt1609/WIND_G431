@@ -1,0 +1,7 @@
+../app/src/state_machine.c:58:6:StateInit	1
+../app/src/state_machine.c:65:13:StateMachineRunning	17
+../app/src/state_machine.c:148:24:WindOff	2
+../app/src/state_machine.c:158:24:CheckWind	9
+../app/src/state_machine.c:203:24:CloseLoop	13
+../app/src/state_machine.c:278:24:ErrorFunction	5
+../app/src/state_machine.c:300:24:StateReset	2

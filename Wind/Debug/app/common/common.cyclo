@@ -1,0 +1,3 @@
+../app/common/common.c:12:10:calcCRC	4
+../app/common/common.c:37:5:crc16	5
+../app/common/common.c:60:6:memcpy_ss	2

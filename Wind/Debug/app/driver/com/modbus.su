@@ -1,0 +1,10 @@
+../app/driver/com/modbus.c:49:13:ModbusResetValue	24	static
+../app/driver/com/modbus.c:67:13:ModbusGetData	24	static
+../app/driver/com/modbus.c:107:13:ModbusSetData	48	static
+../app/driver/com/modbus.c:173:13:ModbusCreateData	48	static
+../app/driver/com/modbus.c:236:13:ModbusSendData	16	static
+../app/driver/com/modbus.c:248:13:ModbusSetReDe	16	static
+../app/driver/com/modbus.c:256:20:create_modbus	24	static
+../app/driver/com/modbus.c:279:6:Modbus1kHz	16	static
+../app/driver/com/modbus.c:289:6:ModbusBackground	24	static
+../app/driver/com/modbus.c:333:6:ModbusAddVariable	24	static

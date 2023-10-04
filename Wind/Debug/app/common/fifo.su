@@ -1,0 +1,9 @@
+../app/common/fifo.c:22:7:create_fifo	24	static
+../app/common/fifo.c:47:10:FIFO_GetAvaiableSpace	16	static
+../app/common/fifo.c:54:13:FIFO_Put	16	static
+../app/common/fifo.c:70:6:FIFO_Puts	32	static
+../app/common/fifo.c:87:6:FIFO_Peak	16	static
+../app/common/fifo.c:100:6:FIFO_Peaks	32	static
+../app/common/fifo.c:116:10:FIFO_Get	16	static
+../app/common/fifo.c:133:6:FIFO_Gets	32	static
+../app/common/fifo.c:147:6:FIFO_Clear	16	static

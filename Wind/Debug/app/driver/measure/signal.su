@@ -1,0 +1,3 @@
+../app/driver/measure/signal.c:39:6:Signal_Init	24	static
+../app/driver/measure/signal.c:46:6:Get_All_Signal	16	static
+../app/driver/measure/signal.c:54:6:Signal_Update	16	static

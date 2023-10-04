@@ -1,0 +1,3 @@
+../app/src/interface.c:20:6:serial_init	8	static
+../app/src/interface.c:24:6:initGlobalVariables	8	static
+../app/src/interface.c:29:6:UpdateAllVariable	4	static

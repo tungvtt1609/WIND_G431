@@ -1,0 +1,3 @@
+../app/common/common.c:12:10:calcCRC	40	static
+../app/common/common.c:37:5:crc16	32	static
+../app/common/common.c:60:6:memcpy_ss	40	static

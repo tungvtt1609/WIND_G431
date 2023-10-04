@@ -1,0 +1,2 @@
+../app/porting/adc/adc.c:38:12:ADC_DMA_CREATE	2
+../app/porting/adc/adc.c:59:10:Get_ADC_VAL_CH	2

@@ -1,0 +1,21 @@
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:66:22:SetCompareCH3	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:76:22:SetCompareCH4	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:86:22:DisableTimerChanel	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:90:22:EnableTimerChanel	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:102:22:EnableCH1NOutput	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:113:22:EnableCH2NOutput	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:135:22:EnableCH1NAndCH2NOutputs	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:153:22:DisableCH1NOutput	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:163:22:DisableCH2NOutput	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:183:22:DisableCH1NAndCH2NOutputs	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:195:22:EnableCntTimer	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:200:22:TIM_EnableIT_CC3	1
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:205:22:TIM_ClearFlag_CC3	1
+../app/driver/control/driver_pwm_dc_dc.c:11:6:PwmWindBuckInit	3
+../app/driver/control/driver_pwm_dc_dc.c:30:6:PwmWindBoostInit	3
+../app/driver/control/driver_pwm_dc_dc.c:50:6:PwmWindBuckBoostEnableAllOutput	1
+../app/driver/control/driver_pwm_dc_dc.c:55:6:PwmWindBuckBoostDisableAllOutput	1
+../app/driver/control/driver_pwm_dc_dc.c:60:6:PwmWindBuckEnable	1
+../app/driver/control/driver_pwm_dc_dc.c:65:6:PwmWindBoostEnable	1
+../app/driver/control/driver_pwm_dc_dc.c:70:6:PwmWindBuckDisable	1
+../app/driver/control/driver_pwm_dc_dc.c:74:6:PwmWindBoostDisable	1

@@ -1,0 +1,3 @@
+../app/src/wind_mppt.c:20:6:TestMPPTInit	16	static
+../app/src/wind_mppt.c:44:6:TestMPPTProcess	16	static
+../app/src/wind_mppt.c:81:6:TestMPPTUpdate	24	static

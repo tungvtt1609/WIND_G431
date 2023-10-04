@@ -1,0 +1,10 @@
+../app/porting/serial/serial.c:56:13:OpenUart2	5
+../app/porting/serial/serial.c:80:13:SendByteUart2	2
+../app/porting/serial/serial.c:90:13:ReceiveByteUart2	2
+../app/porting/serial/serial.c:101:13:OpenUart3	5
+../app/porting/serial/serial.c:125:13:SendByteUart3	2
+../app/porting/serial/serial.c:135:13:ReceiveByteUart3	3
+../app/porting/serial/serial.c:188:6:SerialHandle	4
+../app/porting/serial/serial.c:219:13:create_serial	3
+../app/porting/serial/serial.c:236:6:SerialSendBuf	1
+../app/porting/serial/serial.c:246:10:SerialReadBuf	2

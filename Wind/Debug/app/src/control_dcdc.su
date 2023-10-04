@@ -1,0 +1,14 @@
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:45:22:SetCompareCH1	16	static
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:55:22:SetCompareCH2	16	static
+D:/2.WORK/VMC/Wind turbine/wind_g431/Wind/app/porting/timer/timer_pwm.h:76:22:SetCompareCH4	16	static
+../app/src/control_dcdc.c:42:6:ControlDcDcBuckInit	8	static
+../app/src/control_dcdc.c:48:6:ControlDcDcBoostInit	8	static
+../app/src/control_dcdc.c:56:13:DcDcProcess	8	static
+../app/src/control_dcdc.c:85:6:DC_StopPWM_Boost	8	static
+../app/src/control_dcdc.c:90:6:DC_StartPWM_Boost	8	static
+../app/src/control_dcdc.c:98:6:DC_StopPWM_Buck	8	static
+../app/src/control_dcdc.c:103:6:DC_StartPWM_Buck	8	static
+../app/src/control_dcdc.c:113:6:TestBoost	16	static
+../app/src/control_dcdc.c:118:6:TestBuck	16	static
+../app/src/control_dcdc.c:124:6:Test_Buck_Boost	32	static
+../app/src/control_dcdc.c:139:6:DcDc_ControllerMppt	24	static

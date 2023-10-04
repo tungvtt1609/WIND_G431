@@ -1,0 +1,2 @@
+../app/porting/timer/timer.c:21:6:Timer1kHzAddCallback	2
+../app/porting/timer/timer.c:32:6:TimerTick1kHz	3
