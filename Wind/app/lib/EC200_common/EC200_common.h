@@ -12,6 +12,7 @@
 #define EC200_POWER_PIN_LOW()   Pin_Func_TurnOff(EC200_POWER_PIN)
 #define RECEIVE_SIZE 400
 #define EC200_RESET_COUNTDOWN 5
+#define EC200_RESET_TIMEOUT 20000 //20s 
 
 typedef enum
 {
@@ -36,5 +37,6 @@ void EC200_Init(void);
 bool EC200_SIM_Start(void);
 void EC200_RESET(void);
 void EC200_Delayms(uint32_t mili_sec);
+void EC200_Time_Base_1ms(void);
 
 #endif /* _EC200_COMMON_H_ */

@@ -8,11 +8,16 @@ extern ec200_simStart_state_e ec200_simStart_state;
 /* Extern MQTT application */
 extern MQTT_received_data_type_t MQTT_received_data_type;
 extern uint8_t MQTT_Response_Server[COMMAND_SIZE];
+/* Timeout variables */
+extern bool enable_timeout;
+extern uint32_t ec200_timeout;
 
 void MQTT_Trigger_SIM_Restart(void)
 {
     /* Reset EC200 module using RESET PIN */
     EC200_RESET();
+    ec200_timeout = EC200_RESET_TIMEOUT;
+    enable_timeout = false;
     mqtt_connectServer_state = MQTT_IDLE;
     ec200_simStart_state = EC200_POWER_OFF;
     EC200_Delayms(1000);
@@ -47,7 +52,12 @@ boolean_3_state_e MQTT_SetKeepAlive_Time(uint16_t keepalive_time, uint8_t client
             }
             setKeepalive_time_step = 0;
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout */
+        if (ec200_timeout == 0)
+        {
+            setKeepalive_time_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
     }
     return return_function;
 }
@@ -80,7 +90,12 @@ boolean_3_state_e MQTT_Receiving_Mode(uint8_t client_id, uint8_t msg_recv_mode, 
             }
             setReceivingMode_step = 0;
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout  */
+        if (ec200_timeout == 0)
+        {
+            setReceivingMode_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
     }
     return return_function;
 }
@@ -127,7 +142,13 @@ boolean_3_state_e MQTT_Open(uint8_t client_id, char *host_name, uint16_t port)
                 MQTT_open_step = 0;
             }
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout */
+        if (ec200_timeout == 0)
+        {
+            MQTT_open_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
+        
     }
     return return_function;
 }
@@ -175,7 +196,12 @@ boolean_3_state_e MQTT_Close(uint8_t client_id)
                 MQTT_close_step = 0;
             }
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout */
+        if (ec200_timeout == 0)
+        {
+            MQTT_close_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
     }
     return return_function;
 }
@@ -223,7 +249,12 @@ boolean_3_state_e MQTT_Connect(uint8_t client_id, char *client_name, char *usern
                 MQTT_connect_step = 0;
             }
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout */
+        if (ec200_timeout == 0)
+        {
+            MQTT_connect_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
     }
     return return_function;
 }
@@ -272,7 +303,12 @@ boolean_3_state_e MQTT_Disconnect(uint8_t client_id)
                 MQTT_disconnect_step = 0;
             }
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout */
+        if (ec200_timeout == 0)
+        {
+            MQTT_disconnect_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
     }
     return return_function;
 }
@@ -281,7 +317,7 @@ boolean_3_state_e MQTT_Disconnect(uint8_t client_id)
  * Publish data to particular topic.
  */
 boolean_3_state_e MQTT_PubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, uint8_t retain, uint8_t *topic,
-                                    uint16_t send_datalength, uint8_t *data)
+                                uint16_t send_datalength, uint8_t *data)
 {
     boolean_3_state_e return_function = _NOT_DEFINE_;
     static uint8_t MQTT_pubTopic_step = 0;
@@ -312,7 +348,12 @@ boolean_3_state_e MQTT_PubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, u
                 MQTT_pubTopic_step = 0;
             }
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout  */
+        if (ec200_timeout == 0)
+        {
+            MQTT_pubTopic_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
     }
 
     else if (MQTT_pubTopic_step == 2)
@@ -348,7 +389,12 @@ boolean_3_state_e MQTT_PubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, u
                 MQTT_pubTopic_step = 0;
             }
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout */
+        if (ec200_timeout == 0)
+        {
+            MQTT_pubTopic_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
     }
     return return_function;
 }
@@ -396,8 +442,13 @@ boolean_3_state_e MQTT_SubTopic(uint8_t client_id, uint8_t msgid, char *topic, u
                 MQTT_subTopic_step = 0;
             }
         }
+        /* Timeout */
+        if (ec200_timeout == 0)
+        {
+            MQTT_subTopic_step = 0;
+            MQTT_Trigger_SIM_Restart();
+        }
     }
-    /* TODO: Timeout should be added here */
 
     return return_function;
 }
@@ -472,7 +523,6 @@ bool EC200_MQTT_ConnectToServer(void)
             }
             break;
 
-
         case MQTT_OPENED:
             check_result = MQTT_Connect(CLIENT_ID, MQTT_CLIENT_NAME, MQTT_USER, MQTT_PASSWORD);
             if (check_result == _TRUE_)
@@ -538,24 +588,24 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
 {
     bool return_function = false;
     boolean_3_state_e check_result = _NOT_DEFINE_;
-    
+
     if (mqtt_data_struct != NULL)
     {
         switch (transferring_data_type)
         {
         case BATTERY_DATA:
         {
-            battery_data_t *battery_data_temp = NULL;
-            uint8_t battery_data_buffer[100];
-            memset(battery_data_buffer, 0, 100);
+            battery_send_data_t *battery_data_temp = NULL;
+            uint8_t battery_data_buffer[120];
+            memset(battery_data_buffer, 0, 120);
 
-            battery_data_temp = (battery_data_t *)mqtt_data_struct;
-            sprintf(battery_data_buffer, "{\"type\":\"battery\",\"cap\":\"%d\",\"ov_vol\":\"%d\",\"ud_vol\":\"%d\"}", battery_data_temp->capacity, battery_data_temp->over_voltage, battery_data_temp->under_voltage);
+            battery_data_temp = (battery_send_data_t *)mqtt_data_struct;
+            sprintf(battery_data_buffer, "{\"serial\":\"001\",\"type\":\"battery\",\"batt_status\":\"%d\",\"batt_power\":\"%.2f\",\"batt_volt\":\"%.2f\",\"batt_curr\":\"%.2f\",\"batt_temp\":\"%d\"}", battery_data_temp->state, battery_data_temp->power, battery_data_temp->voltage, battery_data_temp->current, battery_data_temp->temperature);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
                 check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
-                                                 strlen(battery_data_buffer), battery_data_buffer);
+                                             strlen(battery_data_buffer), battery_data_buffer);
             }
 
             if (check_result == _TRUE_)
@@ -568,17 +618,17 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
 
         case WIND_DATA:
         {
-            wind_data_t *wind_data_temp = NULL;
-            uint8_t wind_data_buffer[100];
-            memset(wind_data_buffer, 0, 100);
+            wind_send_data_t *wind_data_temp = NULL;
+            uint8_t wind_data_buffer[120];
+            memset(wind_data_buffer, 0, 120);
 
-            wind_data_temp = (wind_data_t *)mqtt_data_struct;
-            sprintf(wind_data_buffer, "{\"type\":\"wind\",\"max_vol\":\"%d\",\"max_cur\":\"%d\",\"pole\":\"%s\",\"chrg_vol\":\"%d\",\"max_spd\":\"%d\"}", wind_data_temp->max_voltage, wind_data_temp->max_current, wind_data_temp->generator_pole, wind_data_temp->start_charging_voltage, wind_data_temp->max_rotate_speed);
+            wind_data_temp = (wind_send_data_t *)mqtt_data_struct;
+            sprintf(wind_data_buffer, "{\"serial\":\"001\",\"type\":\"wind\",\"wind_rpm\":\"%d\",\"wind_power\":\"%.2f\",\"wind_volt\":\"%.2f\",\"wind_curr\":\"%.2f\"}", wind_data_temp->speed, wind_data_temp->power, wind_data_temp->voltage, wind_data_temp->current);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
                 check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
-                                                 strlen(wind_data_buffer), wind_data_buffer);
+                                             strlen(wind_data_buffer), wind_data_buffer);
             }
 
             if (check_result == _TRUE_)
@@ -591,17 +641,17 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
 
         case SYSTEM_DATA:
         {
-            system_data_t *system_data_temp = NULL;
-            uint8_t system_data_buffer[100];
-            memset(system_data_buffer, 0, 100);
+            system_send_data_t *system_data_temp = NULL;
+            uint8_t system_data_buffer[120];
+            memset(system_data_buffer, 0, 120);
 
-            system_data_temp = (system_data_t *)mqtt_data_struct;
-            sprintf(system_data_buffer, "{\"type\":\"system\",\"ov_out_vol\":\"%d\",\"add_ctler_mdbus\":\"%s\"}", system_data_temp->over_output_voltage, system_data_temp->address_controller_modbus);
+            system_data_temp = (system_send_data_t *)mqtt_data_struct;
+            sprintf(system_data_buffer, "{\"serial\":\"001\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%.2f\",\"sys_mosfet_temp\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
                 check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
-                                                 strlen(system_data_buffer), system_data_buffer);
+                                             strlen(system_data_buffer), system_data_buffer);
             }
 
             if (check_result == _TRUE_)
@@ -654,7 +704,7 @@ bool MQTT_Get_DataField(uint8_t *received_sub_buffer, uint8_t *dataField_buffer)
  * Get the received data if the data is available, data will be saved to a dedicated type buffer.
  * @return: Return the type of data.
  */
-mqtt_transferring_data_e MQTT_Receive_Data(battery_data_t *battery_data_receive_buffer, wind_data_t *wind_data_receive_buffer, system_data_t *system_data_receive_buffer)
+mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data_receive_buffer, wind_received_data_t *wind_data_receive_buffer, system_received_data_t *system_data_receive_buffer)
 {
     mqtt_transferring_data_e return_function = NONE_DATA;
     uint8_t DataField_Buffer[260]; /* Buffer size is 260 due to maximum received size are 255 bytes */

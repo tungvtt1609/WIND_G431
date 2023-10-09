@@ -1,5 +1,8 @@
 #include "EC200_common.h"
 
+bool enable_timeout = false;
+uint32_t ec200_timeout = EC200_RESET_TIMEOUT;
+
 ec200_simStart_state_e ec200_simStart_state = EC200_POWER_OFF;
 uint8_t EC200_Command_Buffer[RECEIVE_SIZE];
 
@@ -52,6 +55,13 @@ bool EC200_ReceiveCommand(uint8_t *receiv_command_buffer)
     uint8_t index = 0;
     bool return_function = false;
 
+    if (enable_timeout == false)
+    {
+        /* Reset timeout */
+        ec200_timeout = EC200_RESET_TIMEOUT;
+        enable_timeout = true;
+    }
+
     if (current_application_occur == MQTT_APPLICATION_OCCUR)
     {
         if (MQTT_received_data_type.Is_Data_From_Command == true)
@@ -64,6 +74,9 @@ bool EC200_ReceiveCommand(uint8_t *receiv_command_buffer)
                 index++;
             }
             MQTT_received_data_type.Is_Data_From_Command = false;
+
+            enable_timeout = false;
+            ec200_timeout = EC200_RESET_TIMEOUT;
             return_function = true;
         }
     }
@@ -79,6 +92,9 @@ bool EC200_ReceiveCommand(uint8_t *receiv_command_buffer)
                 index++;
             }
             FTP_received_data_type.Is_Data_From_Command = false;
+
+            enable_timeout = false;
+            ec200_timeout = EC200_RESET_TIMEOUT;
             return_function = true;
         }
     }
@@ -177,3 +193,16 @@ bool EC200_SIM_Start(void)
     }
     return return_function;
 }
+
+
+void EC200_Time_Base_1ms(void)
+{
+    if(enable_timeout == true)
+    {
+        if(ec200_timeout > 0)
+        {
+            ec200_timeout--;
+        }
+    }
+}
+
