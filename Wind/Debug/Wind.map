@@ -9105,9 +9105,9 @@ LOAD c:/st/stm32cubeide_1.11.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
                 0x0000000020000a46        0x1 ./app/lib/EC200_application.o
  .bss.MQTT_subTopic_step.1
                 0x0000000020000a47        0x1 ./app/lib/EC200_application.o
- .bss.MQTT_DataProcessing_Array
+ .bss.EC200_DataProcessing_Array
                 0x0000000020000a48      0x400 ./app/lib/EC200_uart.o
-                0x0000000020000a48                MQTT_DataProcessing_Array
+                0x0000000020000a48                EC200_DataProcessing_Array
  .bss.MQTT_Response_Command
                 0x0000000020000e48      0x400 ./app/lib/EC200_uart.o
                 0x0000000020000e48                MQTT_Response_Command

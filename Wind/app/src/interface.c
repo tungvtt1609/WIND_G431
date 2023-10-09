@@ -12,7 +12,7 @@
 #include "state_machine.h"
 #include "string.h"
 #include "serial/serial.h"
-#include "lib/EC200_application.h"
+#include "lib/EC200_mqtt_application
 
 extern serial_obj *serial_test_1;
 volatile ManagerVariable g_guiValue;

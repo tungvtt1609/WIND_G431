@@ -1,19 +1,9 @@
 #ifndef _EC200_APP_H_
 #define _EC200_APP_H_
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include "EC200_uart.h"
-#include "EC200_JSON_parsing.h"
-
-#define EC200_RESET_PIN_HIGH()   Pin_Func_TurnOn(EC200_RESET_PIN)
-#define EC200_RESET_PIN_LOW()   Pin_Func_TurnOff(EC200_RESET_PIN)
-#define EC200_POWER_PIN_HIGH()   Pin_Func_TurnOn(EC200_POWER_PIN)
-#define EC200_POWER_PIN_LOW()   Pin_Func_TurnOff(EC200_POWER_PIN)
-
-#define RECEIVE_SIZE 400
-#define EC200_RESET_COUNTDOWN 5
+#include "EC200_common/EC200_common.h"
+#include "EC200_common/EC200_JSON_parsing.h"
+#include "main.h"
 
 /* MQTT parameters */
 #define KEEP_ALIVE_TIME 120 /* 120 seconds */
@@ -34,29 +24,14 @@
 
 typedef enum
 {
-    _FALSE_ = false,
-    _TRUE_ = true,
-    _NOT_DEFINE_
-} boolean_3_state_e;
-
-typedef enum
-{
-    EC200_POWER_OFF = 0,
-    EC200_POWERED_ON,
-    EC200_STARTING_DONE,
-    EC200_RESTART
-} ec200_simStart_state_e;
-
-typedef enum
-{
     MQTT_IDLE = 0,
     MQTT_SENT_KEEPALIVE,
     MQTT_SENT_RECEIVING_MODE,
     MQTT_OPENED,
     MQTT_CONNECTED_DONE,
-    MQTT_SUBCRIBE,
+    MQTT_SUBCRIBED,
     MQTT_RESET
-} ec200_simConnectServer_state_e;
+} mqtt_connectServer_state_e;
 
 /* MQTT transferring data types */
 typedef enum
@@ -70,19 +45,19 @@ typedef enum
 /* MQTT transferring data structs */
 typedef struct
 {
-    float capacity; //cap(Ah)
-    float over_voltage; //ov_vol(Vol)
-    float under_voltage; //ud_vol(Vol)
+    uint16_t capacity; //cap(Ah) 
+    uint16_t over_voltage; //ov_vol(Vol)
+    uint16_t under_voltage; //ud_vol(Vol)
 
 }battery_data_t;
 
 typedef struct
 {
-	float max_voltage; //max_vol(Vol)
-	float max_current; //max_cur(Ampe)
+    uint16_t max_voltage; //max_vol(Vol)
+    uint16_t max_current; //max_cur(Ampe)
     char generator_pole[100]; //pole
-    float start_charging_voltage; //chrg_vol(Vol)
-    float max_rotate_speed; //max_spd(rpm)
+    uint16_t start_charging_voltage; //chrg_vol(Vol)
+    uint16_t max_rotate_speed; //max_spd(rpm)
 }wind_data_t;
 
 typedef struct
@@ -93,7 +68,6 @@ typedef struct
 
 
 /********************************************* USER FUNCTION ***************************************************/
-void EC200_Init(void);
 bool EC200_MQTT_ConnectToServer(void);
 bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transferring_data_type);
 mqtt_transferring_data_e MQTT_Receive_Data(battery_data_t *battery_data_receive_buffer, wind_data_t *wind_data_receive_buffer, system_data_t *system_data_receive_buffer);

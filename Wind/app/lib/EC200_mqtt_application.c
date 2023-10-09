@@ -1,121 +1,21 @@
-#include "EC200_application.h"
+#include "EC200_mqtt_application.h"
 
-ec200_simStart_state_e ec200_simStart_state = EC200_POWER_OFF;
-ec200_simConnectServer_state_e ec200_simConnectServer_state = MQTT_IDLE;
-uint8_t EC200_Command_Buffer[RECEIVE_SIZE];
-/* Flag to notify the data up-coming from server */
-bool Is_Data_From_Server = false;
+mqtt_connectServer_state_e mqtt_connectServer_state = MQTT_IDLE;
 
 /* Extern variables */
-extern EC200_preprocessing_data_t EC200_preprocessing_data;
-extern uint8_t MQTT_DataProcessing_Array[COMMAND_SIZE];
-
-extern uint8_t MQTT_Response_Command[COMMAND_SIZE];
+extern uint8_t EC200_Command_Buffer[RECEIVE_SIZE];
+extern ec200_simStart_state_e ec200_simStart_state;
+/* Extern MQTT application */
+extern MQTT_received_data_type_t MQTT_received_data_type;
 extern uint8_t MQTT_Response_Server[COMMAND_SIZE];
 
-void EC200_Delayms(uint32_t mili_sec) /* Abstract function */
+void MQTT_Trigger_SIM_Restart(void)
 {
-    HAL_Delay(mili_sec);
-}
-
-void EC200_RESET(void)
-{
-    /* Turn on the Power */
-    EC200_POWER_PIN_LOW();
-    EC200_Delayms(1000U);
-    /* RESET EC200 */
-    EC200_RESET_PIN_HIGH();
-    /* Delay 1000 ms */
-    EC200_Delayms(1000U);
-    EC200_RESET_PIN_LOW();
-}
-
-void EC200_Init(void)
-{
-    EC200_UART_Init();
-    /* Reset EC200 module */
+    /* Reset EC200 module using RESET PIN */
     EC200_RESET();
-}
-
-/************************** EC200 data processing functions ********************************/
-bool EC200_CompareCommand(uint8_t *compared_buffer, char *command)
-{
-    if (strcmp((char *)compared_buffer, command) == 0)
-    {
-        return true;
-    }
-    return false;
-}
-
-bool EC200_ReceiveCommand(uint8_t *receiv_command_buffer)
-{
-    uint8_t index = 0;
-    bool return_function = false;
-
-    if (EC200_preprocessing_data.Is_Receive_Done == true)
-    {
-        //memset(receiv_command_buffer, 0, RECEIVE_SIZE);
-        memset(receiv_command_buffer, 0, strlen(receiv_command_buffer));
-        while (MQTT_Response_Command[index] != NULL)
-        {
-            receiv_command_buffer[index] = MQTT_Response_Command[index];
-            index++;
-        }
-        EC200_preprocessing_data.Is_Receive_Done = false;
-        return_function = true;
-    }
-    return return_function;
-}
-
-void EC200_SendCommand(uint8_t *ec200_cmd)
-{
-    EC200_UART_SendString(ec200_cmd);
-}
-
-/******************************************* Starting functions ***********************************************/
-bool Is_Power_ON(void)
-{
-    bool return_function = false;
-    if (EC200_ReceiveCommand(EC200_Command_Buffer))
-    {
-        if (EC200_CompareCommand(EC200_Command_Buffer, "\r\nRDY\r\n"))
-        {
-            return_function = true;
-        }
-    }
-    return return_function;
-}
-
-/**
- * Disable corresponding response from EC200.
- */
-boolean_3_state_e OffEcho(void)
-{
-    boolean_3_state_e return_function = _NOT_DEFINE_;
-    static uint8_t offEcho_step = 0;
-
-    if (offEcho_step == 0)
-    {
-        EC200_SendCommand("ATE0\r");
-        offEcho_step = 1;
-    }
-    else if (offEcho_step == 1)
-    {
-        if (EC200_ReceiveCommand(EC200_Command_Buffer))
-        {
-            if (EC200_CompareCommand(EC200_Command_Buffer, "ATE0\r\r\nOK\r\n"))
-            {
-                return_function = _TRUE_;
-            }
-            else /* Error command */
-            {
-                return_function = _FALSE_;
-            }
-            offEcho_step = 0;
-        }
-        /* TODO: Timeout should be added here */
-    }
-    return return_function;
+    mqtt_connectServer_state = MQTT_IDLE;
+    ec200_simStart_state = EC200_POWER_OFF;
+    EC200_Delayms(1000);
 }
 
 /************************************** MQTT-connecting functions ***********************************************/
@@ -380,7 +280,7 @@ boolean_3_state_e MQTT_Disconnect(uint8_t client_id)
 /**
  * Publish data to particular topic.
  */
-boolean_3_state_e SIM_MQTT_pubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, uint8_t retain, uint8_t *topic,
+boolean_3_state_e MQTT_PubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, uint8_t retain, uint8_t *topic,
                                     uint16_t send_datalength, uint8_t *data)
 {
     boolean_3_state_e return_function = _NOT_DEFINE_;
@@ -453,7 +353,7 @@ boolean_3_state_e SIM_MQTT_pubTopic(uint8_t client_id, uint8_t msgid, uint8_t qo
     return return_function;
 }
 
-boolean_3_state_e SIM_MQTT_subTopic(uint8_t client_id, uint8_t msgid, char *topic, uint8_t qos)
+boolean_3_state_e MQTT_SubTopic(uint8_t client_id, uint8_t msgid, char *topic, uint8_t qos)
 {
     boolean_3_state_e return_function = _NOT_DEFINE_;
     static uint8_t MQTT_subTopic_step = 0;
@@ -504,56 +404,6 @@ boolean_3_state_e SIM_MQTT_subTopic(uint8_t client_id, uint8_t msgid, char *topi
 
 /******************************************** Application sequence functions **********************************************/
 /**
- * Initialize EC200 module after power-up.
- */
-bool EC200_SIM_Start(void)
-{
-    bool return_function = false;
-    boolean_3_state_e check_result = _NOT_DEFINE_;
-
-    switch (ec200_simStart_state)
-    {
-    /* EC200_POWERED_OFF is the first state if the state rolls back */
-    case EC200_POWER_OFF:
-        if (Is_Power_ON())
-        {
-            ec200_simStart_state = EC200_POWERED_ON;
-            EC200_Delayms(500); /* Delay after each state */
-        }
-        break;
-    case EC200_POWERED_ON:
-        check_result = OffEcho();
-        if (check_result == _TRUE_)
-        {
-            ec200_simStart_state = EC200_STARTING_DONE;
-            EC200_Delayms(500); /* Delay after each state */
-        }
-        break;
-
-    case EC200_STARTING_DONE: /* Starting completed */
-        return_function = true;
-        break;
-
-    case EC200_RESTART:
-        /* TODO */
-        break;
-
-    default:
-        break;
-    }
-    return return_function;
-}
-
-void EC200_SIM_Restart(void)
-{
-    /* Reset EC200 module using RESET PIN */
-    EC200_RESET();
-    ec200_simConnectServer_state = MQTT_IDLE;
-    ec200_simStart_state = EC200_POWER_OFF;
-    EC200_Delayms(1000);
-}
-
-/**
  * MQTT client connects to Server.
  */
 bool EC200_MQTT_ConnectToServer(void)
@@ -564,14 +414,14 @@ bool EC200_MQTT_ConnectToServer(void)
 
     if (EC200_SIM_Start()) /* If EC200 has been successfully started */
     {
-        switch (ec200_simConnectServer_state)
+        switch (mqtt_connectServer_state)
         {
         /* MQTT_IDLE is the first state if the state rolls back */
         case MQTT_IDLE:
             check_result = MQTT_SetKeepAlive_Time(KEEP_ALIVE_TIME, CLIENT_ID);
             if (check_result == _TRUE_)
             {
-                ec200_simConnectServer_state = MQTT_SENT_KEEPALIVE;
+                mqtt_connectServer_state = MQTT_SENT_KEEPALIVE;
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
@@ -580,7 +430,7 @@ bool EC200_MQTT_ConnectToServer(void)
                 reset_sim_countdown--;
                 if (reset_sim_countdown == 0)
                 {
-                    ec200_simConnectServer_state = MQTT_RESET;
+                    mqtt_connectServer_state = MQTT_RESET;
                 }
             }
             break;
@@ -589,7 +439,7 @@ bool EC200_MQTT_ConnectToServer(void)
             check_result = MQTT_Receiving_Mode(CLIENT_ID, 0, 0);
             if (check_result == _TRUE_)
             {
-                ec200_simConnectServer_state = MQTT_SENT_RECEIVING_MODE;
+                mqtt_connectServer_state = MQTT_SENT_RECEIVING_MODE;
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
@@ -598,7 +448,7 @@ bool EC200_MQTT_ConnectToServer(void)
                 reset_sim_countdown--;
                 if (reset_sim_countdown == 0)
                 {
-                    ec200_simConnectServer_state = MQTT_RESET;
+                    mqtt_connectServer_state = MQTT_RESET;
                 }
             }
 
@@ -608,7 +458,7 @@ bool EC200_MQTT_ConnectToServer(void)
             check_result = MQTT_Open(CLIENT_ID, MQTT_BROKER, MQTT_PORT);
             if (check_result == _TRUE_)
             {
-                ec200_simConnectServer_state = MQTT_OPENED;
+                mqtt_connectServer_state = MQTT_OPENED;
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
@@ -617,7 +467,7 @@ bool EC200_MQTT_ConnectToServer(void)
                 reset_sim_countdown--;
                 if (reset_sim_countdown == 0)
                 {
-                    ec200_simConnectServer_state = MQTT_RESET;
+                    mqtt_connectServer_state = MQTT_RESET;
                 }
             }
             break;
@@ -627,7 +477,7 @@ bool EC200_MQTT_ConnectToServer(void)
             check_result = MQTT_Connect(CLIENT_ID, MQTT_CLIENT_NAME, MQTT_USER, MQTT_PASSWORD);
             if (check_result == _TRUE_)
             {
-                ec200_simConnectServer_state = MQTT_CONNECTED_DONE;
+                mqtt_connectServer_state = MQTT_CONNECTED_DONE;
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
@@ -636,16 +486,16 @@ bool EC200_MQTT_ConnectToServer(void)
                 reset_sim_countdown--;
                 if (reset_sim_countdown == 0)
                 {
-                    ec200_simConnectServer_state = MQTT_RESET;
+                    mqtt_connectServer_state = MQTT_RESET;
                 }
             }
             break;
 
         case MQTT_CONNECTED_DONE:
-            check_result = SIM_MQTT_subTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_SUB_TOPIC, MQTT_QOS_SUB);
+            check_result = MQTT_SubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_SUB_TOPIC, MQTT_QOS_SUB);
             if (check_result == _TRUE_)
             {
-                ec200_simConnectServer_state = MQTT_SUBCRIBE;
+                mqtt_connectServer_state = MQTT_SUBCRIBED;
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
@@ -654,20 +504,20 @@ bool EC200_MQTT_ConnectToServer(void)
                 reset_sim_countdown--;
                 if (reset_sim_countdown == 0)
                 {
-                    ec200_simConnectServer_state = MQTT_RESET;
+                    mqtt_connectServer_state = MQTT_RESET;
                 }
             }
 
             break;
 
-        case MQTT_SUBCRIBE:
+        case MQTT_SUBCRIBED:
             return_function = true;
 
             break;
 
         case MQTT_RESET:
             reset_sim_countdown = EC200_RESET_COUNTDOWN;
-            EC200_SIM_Restart();
+            MQTT_Trigger_SIM_Restart();
 
             break;
 
@@ -701,11 +551,10 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
 
             battery_data_temp = (battery_data_t *)mqtt_data_struct;
             sprintf(battery_data_buffer, "{\"type\":\"battery\",\"cap\":\"%d\",\"ov_vol\":\"%d\",\"ud_vol\":\"%d\"}", battery_data_temp->capacity, battery_data_temp->over_voltage, battery_data_temp->under_voltage);
-            //sprintf(battery_data_buffer, "type:battery,cap:%d,ov_vol:%d,ud_vol:%d", battery_data_temp->capacity, battery_data_temp->over_voltage, battery_data_temp->under_voltage);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
-                check_result = SIM_MQTT_pubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
                                                  strlen(battery_data_buffer), battery_data_buffer);
             }
 
@@ -725,11 +574,10 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
 
             wind_data_temp = (wind_data_t *)mqtt_data_struct;
             sprintf(wind_data_buffer, "{\"type\":\"wind\",\"max_vol\":\"%d\",\"max_cur\":\"%d\",\"pole\":\"%s\",\"chrg_vol\":\"%d\",\"max_spd\":\"%d\"}", wind_data_temp->max_voltage, wind_data_temp->max_current, wind_data_temp->generator_pole, wind_data_temp->start_charging_voltage, wind_data_temp->max_rotate_speed);
-            //sprintf(wind_data_buffer, "type:wind,max_vol:%d,max_cur:%d,pole:%s,chrg_vol:%d,max_spd:%d", wind_data_temp->max_voltage, wind_data_temp->max_current, wind_data_temp->generator_pole, wind_data_temp->start_charging_voltage, wind_data_temp->max_rotate_speed);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
-                check_result = SIM_MQTT_pubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
                                                  strlen(wind_data_buffer), wind_data_buffer);
             }
 
@@ -749,11 +597,10 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
 
             system_data_temp = (system_data_t *)mqtt_data_struct;
             sprintf(system_data_buffer, "{\"type\":\"system\",\"ov_out_vol\":\"%d\",\"add_ctler_mdbus\":\"%s\"}", system_data_temp->over_output_voltage, system_data_temp->address_controller_modbus);
-            //sprintf(system_data_buffer, "type:system,ov_out_vol:%d,add_ctler_mdbus:%s", system_data_temp->over_output_voltage, system_data_temp->address_controller_modbus);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
-                check_result = SIM_MQTT_pubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
                                                  strlen(system_data_buffer), system_data_buffer);
             }
 
@@ -812,7 +659,7 @@ mqtt_transferring_data_e MQTT_Receive_Data(battery_data_t *battery_data_receive_
     mqtt_transferring_data_e return_function = NONE_DATA;
     uint8_t DataField_Buffer[260]; /* Buffer size is 260 due to maximum received size are 255 bytes */
     uint8_t JSON_value[100];
-    if (Is_Data_From_Server == true)
+    if (MQTT_received_data_type.Is_Data_From_Server == true)
     {
         if (MQTT_Get_DataField(MQTT_Response_Server, DataField_Buffer))
         {
@@ -902,7 +749,7 @@ mqtt_transferring_data_e MQTT_Receive_Data(battery_data_t *battery_data_receive_
             }
         }
         memset(MQTT_Response_Server, 0, strlen(MQTT_Response_Server));
-        Is_Data_From_Server = false;
+        MQTT_received_data_type.Is_Data_From_Server = false;
     }
     return return_function;
 }
