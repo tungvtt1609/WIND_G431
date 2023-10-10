@@ -56,7 +56,7 @@ battery_data_t BAT_DAT = {
 
 void TEST(void){
 	if(EC200_MQTT_ConnectToServer()){
-		MQTT_Transmit_Data(&BAT_DAT, BATTERY_DATA);
+		MQTT_Transmit_Data((void*)&BAT_DAT, BATTERY_DATA);
 		Pin_Func_TurnOff(LED1);
 	}
 	HAL_Delay(500);

@@ -61,6 +61,7 @@ void EC200_UART_Handler(uint8_t rx_char)
             /* Receive data from Server */
             if (strstr(EC200_DataProcessing_Array, "+QMTRECV:") != NULL)
             {
+                
                 MQTT_received_data_type.Is_Data_From_Server = true;
 
                 memset(MQTT_Response_Server, 0, strlen(MQTT_Response_Server));

@@ -25,7 +25,7 @@ void EC200_RESET(void)
 {
     /* Turn on the Power */
     EC200_POWER_PIN_LOW();
-    EC200_Delayms(1000U);
+    EC200_Delayms(3000U);
     /* RESET EC200 */
     EC200_RESET_PIN_HIGH();
     /* Delay 1000 ms */
@@ -118,6 +118,15 @@ bool Is_Power_ON(void)
             return_function = true;
         }
     }
+    /* Timeout  */
+    if (ec200_timeout == 0)
+    {
+        EC200_RESET();
+        ec200_timeout = EC200_RESET_TIMEOUT;
+        enable_timeout = false;
+        ec200_simStart_state = EC200_POWER_OFF;
+        EC200_Delayms(1000);
+    }
     return return_function;
 }
 
@@ -148,7 +157,16 @@ boolean_3_state_e OffEcho(void)
             }
             offEcho_step = 0;
         }
-        /* TODO: Timeout should be added here */
+        /* Timeout  */
+        if (ec200_timeout == 0)
+        {
+            offEcho_step = 0;
+            EC200_RESET();
+            ec200_timeout = EC200_RESET_TIMEOUT;
+            enable_timeout = false;
+            ec200_simStart_state = EC200_POWER_OFF;
+            EC200_Delayms(1000);
+        }
     }
     return return_function;
 }

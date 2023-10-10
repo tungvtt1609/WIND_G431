@@ -8,6 +8,12 @@
         "fifo.h": "c",
         "ec200_application.h": "c",
         "ec200_json_parsing.h": "c",
-        "interface.h": "c"
+        "interface.h": "c",
+        "ec200_mqtt_application.h": "c",
+        "modbus.h": "c",
+        "wind_mppt.h": "c",
+        "ec200_common.h": "c",
+        "pin_func.h": "c",
+        "types.h": "c"
     }
 }
