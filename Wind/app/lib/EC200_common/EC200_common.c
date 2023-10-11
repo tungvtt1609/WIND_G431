@@ -5,6 +5,9 @@ uint32_t ec200_timeout = EC200_RESET_TIMEOUT;
 uint8_t reset_sim_countdown = EC200_RESET_COUNTDOWN;
 
 ec200_simStart_state_e ec200_simStart_state = EC200_POWER_OFF;
+ec200_simStart_state_e ec200_simStart_desired_state;
+delay_process_t delay_process = {false, EC200_DELAY_OF_SEQUENCE};
+
 uint8_t EC200_Command_Buffer[RECEIVE_SIZE];
 
 /* External variables */
@@ -186,21 +189,32 @@ bool EC200_SIM_Start(void)
     case EC200_POWER_OFF:
         if (Is_Power_ON())
         {
-            ec200_simStart_state = EC200_POWERED_ON;
-            EC200_Delayms(1000); /* Delay after each state */
+            ec200_simStart_desired_state = EC200_POWERED_ON;
+            ec200_simStart_state = EC200_DELAY; /* Delay after each state */ 
         }
         break;
     case EC200_POWERED_ON:
         check_result = OffEcho();
         if (check_result == _TRUE_)
         {
-            ec200_simStart_state = EC200_STARTING_DONE;
-            EC200_Delayms(1000); /* Delay after each state */
+            ec200_simStart_desired_state = EC200_STARTING_DONE;
+            ec200_simStart_state = EC200_DELAY; /* Delay after each state */
         }
         break;
 
     case EC200_STARTING_DONE: /* Starting completed */
         return_function = true;
+        break;
+
+    case EC200_DELAY:
+        delay_process.is_enable = true;
+        if(delay_process.delay_count == 0)
+        {
+            ec200_simStart_state = ec200_simStart_desired_state;
+            delay_process.is_enable = false;
+            delay_process.delay_count = EC200_DELAY_OF_SEQUENCE;
+
+        }
         break;
 
     case EC200_RESTART:
@@ -222,6 +236,17 @@ void EC200_Time_Base_1ms(void)
         {
             ec200_timeout--;
         }
+    }
+    if(delay_process.is_enable == true)
+    {
+        if(delay_process.delay_count > 0)
+        {
+            delay_process.delay_count--;
+        }
+    }
+    else
+    {
+        delay_process.delay_count = EC200_DELAY_OF_SEQUENCE;
     }
 }
 

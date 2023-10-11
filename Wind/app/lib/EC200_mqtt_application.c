@@ -1,7 +1,7 @@
 #include "EC200_mqtt_application.h"
 
 mqtt_connectServer_state_e mqtt_connectServer_state = MQTT_IDLE;
-
+mqtt_connectServer_state_e mqtt_connectServer_desired_state;
 /* Extern variables */
 extern uint8_t EC200_Command_Buffer[RECEIVE_SIZE];
 extern ec200_simStart_state_e ec200_simStart_state;
@@ -12,6 +12,8 @@ extern uint8_t MQTT_Response_Server[COMMAND_SIZE];
 extern bool enable_timeout;
 extern uint32_t ec200_timeout;
 extern uint8_t reset_sim_countdown;
+/* Delay processing */
+extern delay_process_t delay_process;
 
 void MQTT_Trigger_SIM_Restart(void)
 {
@@ -22,7 +24,7 @@ void MQTT_Trigger_SIM_Restart(void)
     enable_timeout = false;
     mqtt_connectServer_state = MQTT_IDLE;
     ec200_simStart_state = EC200_POWER_OFF;
-    EC200_Delayms(1000);
+    EC200_Delayms(1000); /* So important */
 }
 
 /************************************** MQTT-connecting functions ***********************************************/
@@ -477,9 +479,10 @@ bool EC200_MQTT_ConnectToServer(void)
             check_result = MQTT_SetKeepAlive_Time(KEEP_ALIVE_TIME, CLIENT_ID);
             if (check_result == _TRUE_)
             {
-                mqtt_connectServer_state = MQTT_SENT_KEEPALIVE;
+                mqtt_connectServer_desired_state = MQTT_SENT_KEEPALIVE;
+                mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-                EC200_Delayms(500); /* Delay after each state */
+
             }
             else if (check_result == _FALSE_)
             {
@@ -495,9 +498,10 @@ bool EC200_MQTT_ConnectToServer(void)
             check_result = MQTT_Receiving_Mode(CLIENT_ID, 0, 0);
             if (check_result == _TRUE_)
             {
-                mqtt_connectServer_state = MQTT_SENT_RECEIVING_MODE;
+                mqtt_connectServer_desired_state = MQTT_SENT_RECEIVING_MODE;
+                mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-                EC200_Delayms(500); /* Delay after each state */
+
             }
             else if (check_result == _FALSE_)
             {
@@ -514,9 +518,10 @@ bool EC200_MQTT_ConnectToServer(void)
             check_result = MQTT_Open(CLIENT_ID, MQTT_BROKER, MQTT_PORT);
             if (check_result == _TRUE_)
             {
-                mqtt_connectServer_state = MQTT_OPENED;
+                mqtt_connectServer_desired_state = MQTT_OPENED;
+                mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-                EC200_Delayms(500); /* Delay after each state */
+
             }
             else if (check_result == _FALSE_)
             {
@@ -532,9 +537,10 @@ bool EC200_MQTT_ConnectToServer(void)
             check_result = MQTT_Connect(CLIENT_ID, MQTT_CLIENT_NAME, MQTT_USER, MQTT_PASSWORD);
             if (check_result == _TRUE_)
             {
-                mqtt_connectServer_state = MQTT_CONNECTED_DONE;
+                mqtt_connectServer_desired_state = MQTT_CONNECTED_DONE;
+                mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-                EC200_Delayms(500); /* Delay after each state */
+
             }
             else if (check_result == _FALSE_)
             {
@@ -550,9 +556,10 @@ bool EC200_MQTT_ConnectToServer(void)
             check_result = MQTT_SubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_SUB_TOPIC, MQTT_QOS_SUB);
             if (check_result == _TRUE_)
             {
-                mqtt_connectServer_state = MQTT_SUBCRIBED;
+                mqtt_connectServer_desired_state = MQTT_SUBCRIBED;
+                mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-                EC200_Delayms(500); /* Delay after each state */
+
             }
             else if (check_result == _FALSE_)
             {
@@ -568,6 +575,16 @@ bool EC200_MQTT_ConnectToServer(void)
         case MQTT_SUBCRIBED:
             return_function = true;
 
+            break;
+
+        case MQTT_DELAY:
+            delay_process.is_enable = true;
+            if (delay_process.delay_count == 0)
+            {
+                mqtt_connectServer_state = mqtt_connectServer_desired_state;
+                delay_process.is_enable = false;
+                delay_process.delay_count = EC200_DELAY_OF_SEQUENCE;
+            }
             break;
 
         case MQTT_RESET:

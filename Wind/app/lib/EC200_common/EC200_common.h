@@ -14,13 +14,22 @@
 #define EC200_RESET_COUNTDOWN 3
 #define EC200_RESET_TIMEOUT 5000 //5s
 
+#define EC200_DELAY_OF_SEQUENCE 700 //700ms
+
 typedef enum
 {
     EC200_POWER_OFF = 0,
     EC200_POWERED_ON,
     EC200_STARTING_DONE,
+    EC200_DELAY,
     EC200_RESTART
 } ec200_simStart_state_e;
+
+typedef struct 
+{
+    bool is_enable;
+    uint32_t delay_count;
+}delay_process_t;
 
 typedef enum
 {

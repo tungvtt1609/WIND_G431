@@ -30,6 +30,7 @@ typedef enum
     MQTT_OPENED,
     MQTT_CONNECTED_DONE,
     MQTT_SUBCRIBED,
+    MQTT_DELAY,
     MQTT_RESET
 } mqtt_connectServer_state_e;
 
