@@ -9,7 +9,8 @@
 #define KEEP_ALIVE_TIME 120 /* 120 seconds */
 #define CLIENT_ID 2
 #define MQTT_BROKER "117.1.17.14"
-#define MQTT_PORT 1883
+// #define MQTT_BROKER "broker.mqtt.cool"
+#define MQTT_PORT 53195
 #define MQTT_CLIENT_NAME "abc"
 #define MQTT_USER ""
 #define MQTT_PASSWORD ""
@@ -19,7 +20,7 @@
 #define MQTT_RETAIN 0
 
 /* MQTT PUB/SUB topics */
-#define MQTT_PUB_TOPIC "serial_001"
+#define MQTT_PUB_TOPIC "serial_002"
 #define MQTT_SUB_TOPIC "vmc/sub"
 
 typedef enum
@@ -53,74 +54,60 @@ typedef enum
     BAT_FULL
 } battery_capacity_e;
 
-typedef enum
-{
-    BAT_TEMP_NORMAL = 0,
-    BAT_TEMP_HIGH,
-    BAT_TEMP_OTP,
-    BAT_TEMP_ERROR
-} battery_temperature_e;
 
 typedef enum
 {
     WIND_OFF = 0,
     CHECK_WIND,
     CLOSE_LOOP,
-    RESET,
-    ERROR
+    SYS_RESET,
+    SYS_ERROR
 } system_controller_state_e;
 
 typedef enum
 {
-    CODE_OK = 0,
-    NO_WIND_INPUT,
-    NO_BAT,
-    CODE_OVDC1,
-    CODE_OVDC2,
-    CODE_UVDC1,
-    CODE_UVDC2,
-    CODE_OCDC1,
-    CODE_OCDC2
+    SYS_CODE_OK = 0,
+    SYS_NO_WIND_INPUT,
+	SYS_NO_BAT,
+	SYS_CODE_OVDC1,
+	SYS_CODE_OVDC2,
+	SYS_CODE_UVDC1,
+	SYS_CODE_UVDC2,
+	SYS_CODE_OCDC1,
+	SYS_CODE_OCDC2
 } system_error_code_e;
 
-typedef enum
-{
-    SYS_TEMP_NORMAL = 0,
-    SYS_TEMP_HIGH,
-    SYS_TEMP_OTP,
-    SYS_TEMP_ERROR
-} system_temperature_e;
 
 
 /* MQTT transferring data structs */
 
-/******* Send data ******/
+/***************** Send data ********************/
 typedef struct
 {
     battery_capacity_e state;
-    float power; //(W) 
-    float voltage; //(V)
-    float current; //(A)
-    battery_temperature_e temperature;
+    uint16_t power; //(W) 
+    uint16_t voltage; //(V)
+    uint16_t current; //(A)
+    uint8_t temperature;
 }battery_send_data_t;
 
 typedef struct
 {
     uint16_t speed; //(RPM)
-    float power; //(W) 
-    float voltage; //(V)
-    float current; //(A)
+    uint16_t power; //(W) 
+    uint16_t voltage; //(V)
+    uint16_t current; //(A)
 }wind_send_data_t;
 
 typedef struct
 {
     system_controller_state_e controller_state;
     system_error_code_e error_code;
-    float total_energy; //(kWh)
-    system_temperature_e temperature;
+    uint16_t total_energy; //(kWh)
+    uint16_t temperature;
 }system_send_data_t;
 
-/******* Received data ******/
+/***************** Received data ********************/
 typedef struct
 {
     uint16_t capacity; //cap(Ah) 
@@ -133,7 +120,7 @@ typedef struct
 {
     uint16_t max_voltage; //max_vol(Vol)
     uint16_t max_current; //max_cur(Ampe)
-    char generator_pole[100]; //pole
+    char generator_pole[50]; //pole
     uint16_t start_charging_voltage; //chrg_vol(Vol)
     uint16_t max_rotate_speed; //max_spd(rpm)
 }wind_received_data_t;
@@ -141,7 +128,7 @@ typedef struct
 typedef struct
 {
     uint16_t over_output_voltage; //ov_out_vol(Vol)
-    char address_controller_modbus[100]; //add_ctler_mdbus
+    char address_controller_modbus[50]; //add_ctler_mdbus
 }system_received_data_t;
 
 

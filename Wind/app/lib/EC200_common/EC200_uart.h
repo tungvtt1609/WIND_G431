@@ -12,7 +12,8 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-#define COMMAND_SIZE 1024
+// #define COMMAND_SIZE 1024
+#define COMMAND_SIZE 600
 
 /* PE2 is configured as POWER_PIN */
 #define EC200_RESET_PIN RESET_4G

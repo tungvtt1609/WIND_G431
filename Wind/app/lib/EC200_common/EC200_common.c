@@ -29,7 +29,7 @@ void EC200_RESET(void)
 {
     /* Turn on the Power */
     EC200_POWER_PIN_LOW();
-    EC200_Delayms(3000U);
+    EC200_Delayms(1000U);
     /* RESET EC200 */
     EC200_RESET_PIN_HIGH();
     /* Delay 1000 ms */
