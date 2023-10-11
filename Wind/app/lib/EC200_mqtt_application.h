@@ -145,6 +145,7 @@ typedef struct
 
 
 /********************************************* USER FUNCTIONS ***************************************************/
+void MQTT_Trigger_SIM_Restart(void);
 bool EC200_MQTT_ConnectToServer(void);
 bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transferring_data_type);
 mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data_receive_buffer, wind_received_data_t *wind_data_receive_buffer, system_received_data_t *system_data_receive_buffer);

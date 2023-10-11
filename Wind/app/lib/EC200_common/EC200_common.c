@@ -2,6 +2,7 @@
 
 bool enable_timeout = false;
 uint32_t ec200_timeout = EC200_RESET_TIMEOUT;
+uint8_t reset_sim_countdown = EC200_RESET_COUNTDOWN;
 
 ec200_simStart_state_e ec200_simStart_state = EC200_POWER_OFF;
 uint8_t EC200_Command_Buffer[RECEIVE_SIZE];
@@ -186,7 +187,7 @@ bool EC200_SIM_Start(void)
         if (Is_Power_ON())
         {
             ec200_simStart_state = EC200_POWERED_ON;
-            EC200_Delayms(500); /* Delay after each state */
+            EC200_Delayms(1000); /* Delay after each state */
         }
         break;
     case EC200_POWERED_ON:
@@ -194,7 +195,7 @@ bool EC200_SIM_Start(void)
         if (check_result == _TRUE_)
         {
             ec200_simStart_state = EC200_STARTING_DONE;
-            EC200_Delayms(500); /* Delay after each state */
+            EC200_Delayms(1000); /* Delay after each state */
         }
         break;
 

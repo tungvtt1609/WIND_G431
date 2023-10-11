@@ -11,12 +11,14 @@ extern uint8_t MQTT_Response_Server[COMMAND_SIZE];
 /* Timeout variables */
 extern bool enable_timeout;
 extern uint32_t ec200_timeout;
+extern uint8_t reset_sim_countdown;
 
 void MQTT_Trigger_SIM_Restart(void)
 {
     /* Reset EC200 module using RESET PIN */
     EC200_RESET();
     ec200_timeout = EC200_RESET_TIMEOUT;
+    reset_sim_countdown = EC200_RESET_COUNTDOWN;
     enable_timeout = false;
     mqtt_connectServer_state = MQTT_IDLE;
     ec200_simStart_state = EC200_POWER_OFF;
@@ -352,6 +354,8 @@ boolean_3_state_e MQTT_PubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, u
         if (ec200_timeout == 0)
         {
             MQTT_pubTopic_step = 0;
+            /* Return _FALSE_ to break out of while() */
+            return_function = _FALSE_;
             MQTT_Trigger_SIM_Restart();
         }
     }
@@ -393,6 +397,8 @@ boolean_3_state_e MQTT_PubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, u
         if (ec200_timeout == 0)
         {
             MQTT_pubTopic_step = 0;
+            /* Return _FALSE_ to break out of while() */
+            return_function = _FALSE_;
             MQTT_Trigger_SIM_Restart();
         }
     }
@@ -461,7 +467,6 @@ bool EC200_MQTT_ConnectToServer(void)
 {
     bool return_function = false;
     boolean_3_state_e check_result = _NOT_DEFINE_;
-    static uint8_t reset_sim_countdown = EC200_RESET_COUNTDOWN; /* If MQTT reconnect greater than reset_sim_countdown then EC200 module is reset */
 
     if (EC200_SIM_Start()) /* If EC200 has been successfully started */
     {
@@ -566,7 +571,6 @@ bool EC200_MQTT_ConnectToServer(void)
             break;
 
         case MQTT_RESET:
-            reset_sim_countdown = EC200_RESET_COUNTDOWN;
             MQTT_Trigger_SIM_Restart();
 
             break;
@@ -596,8 +600,8 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case BATTERY_DATA:
         {
             battery_send_data_t *battery_data_temp = NULL;
-            uint8_t battery_data_buffer[120];
-            memset(battery_data_buffer, 0, 120);
+            uint8_t battery_data_buffer[200];
+            memset(battery_data_buffer, 0, 200);
 
             battery_data_temp = (battery_send_data_t *)mqtt_data_struct;
             sprintf(battery_data_buffer, "{\"serial\":\"001\",\"type\":\"battery\",\"batt_status\":\"%d\",\"batt_power\":\"%.2f\",\"batt_volt\":\"%.2f\",\"batt_curr\":\"%.2f\",\"batt_temp\":\"%d\"}", battery_data_temp->state, battery_data_temp->power, battery_data_temp->voltage, battery_data_temp->current, battery_data_temp->temperature);
@@ -619,8 +623,8 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case WIND_DATA:
         {
             wind_send_data_t *wind_data_temp = NULL;
-            uint8_t wind_data_buffer[120];
-            memset(wind_data_buffer, 0, 120);
+            uint8_t wind_data_buffer[200];
+            memset(wind_data_buffer, 0, 200);
 
             wind_data_temp = (wind_send_data_t *)mqtt_data_struct;
             sprintf(wind_data_buffer, "{\"serial\":\"001\",\"type\":\"wind\",\"wind_rpm\":\"%d\",\"wind_power\":\"%.2f\",\"wind_volt\":\"%.2f\",\"wind_curr\":\"%.2f\"}", wind_data_temp->speed, wind_data_temp->power, wind_data_temp->voltage, wind_data_temp->current);
@@ -642,8 +646,8 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case SYSTEM_DATA:
         {
             system_send_data_t *system_data_temp = NULL;
-            uint8_t system_data_buffer[120];
-            memset(system_data_buffer, 0, 120);
+            uint8_t system_data_buffer[200];
+            memset(system_data_buffer, 0, 200);
 
             system_data_temp = (system_send_data_t *)mqtt_data_struct;
             sprintf(system_data_buffer, "{\"serial\":\"001\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%.2f\",\"sys_mosfet_temp\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature);
