@@ -26806,7 +26806,7 @@ void EC200_UART_Handler(uint8_t rx_char)
  800a60e:	4603      	mov	r3, r0
  800a610:	71fb      	strb	r3, [r7, #7]
         /* Buffer save the data to check it's sent from Server or not */
-        MQTT_DataProcessing_Array[EC200_preprocessing_data.Upcoming_Data_Count] = rx_char;
+        EC200_DataProcessing_Array[EC200_preprocessing_data.Upcoming_Data_Count] = rx_char;
  800a612:	4b3e      	ldr	r3, [pc, #248]	; (800a70c <EC200_UART_Handler+0x104>)
  800a614:	881b      	ldrh	r3, [r3, #0]
  800a616:	4619      	mov	r1, r3
@@ -26821,7 +26821,7 @@ void EC200_UART_Handler(uint8_t rx_char)
  800a626:	4b39      	ldr	r3, [pc, #228]	; (800a70c <EC200_UART_Handler+0x104>)
  800a628:	801a      	strh	r2, [r3, #0]
 
-        if ((EC200_preprocessing_data.Upcoming_Data_Count > 3) && ((rx_char == '\n') || ((strcmp((char *)MQTT_DataProcessing_Array, "\r\n> ") == 0)))) /* >3 to avoid the first end of line  */
+        if ((EC200_preprocessing_data.Upcoming_Data_Count > 3) && ((rx_char == '\n') || ((strcmp((char *)EC200_DataProcessing_Array, "\r\n> ") == 0)))) /* >3 to avoid the first end of line  */
  800a62a:	4b38      	ldr	r3, [pc, #224]	; (800a70c <EC200_UART_Handler+0x104>)
  800a62c:	881b      	ldrh	r3, [r3, #0]
  800a62e:	2b03      	cmp	r3, #3
@@ -26837,7 +26837,7 @@ void EC200_UART_Handler(uint8_t rx_char)
  800a644:	d15e      	bne.n	800a704 <EC200_UART_Handler+0xfc>
         {
             /* Exception cases */
-            if((strcmp((char *)MQTT_DataProcessing_Array, "ATE0\r\r\n") == 0))
+            if((strcmp((char *)EC200_DataProcessing_Array, "ATE0\r\r\n") == 0))
  800a646:	4934      	ldr	r1, [pc, #208]	; (800a718 <EC200_UART_Handler+0x110>)
  800a648:	4831      	ldr	r0, [pc, #196]	; (800a710 <EC200_UART_Handler+0x108>)
  800a64a:	f7f5 fde9 	bl	8000220 <strcmp>
@@ -26849,7 +26849,7 @@ void EC200_UART_Handler(uint8_t rx_char)
             }
 
             /* Receive data from Server */
-            if (strstr(MQTT_DataProcessing_Array, "+QMTRECV:") != NULL)
+            if (strstr(EC200_DataProcessing_Array, "+QMTRECV:") != NULL)
  800a654:	4931      	ldr	r1, [pc, #196]	; (800a71c <EC200_UART_Handler+0x114>)
  800a656:	482e      	ldr	r0, [pc, #184]	; (800a710 <EC200_UART_Handler+0x108>)
  800a658:	f001 fe3a 	bl	800c2d0 <strstr>
@@ -26876,7 +26876,7 @@ void EC200_UART_Handler(uint8_t rx_char)
  800a67c:	60fb      	str	r3, [r7, #12]
  800a67e:	e00b      	b.n	800a698 <EC200_UART_Handler+0x90>
                 {
-                    MQTT_Response_Server[i] = MQTT_DataProcessing_Array[i];
+                    MQTT_Response_Server[i] = EC200_DataProcessing_Array[i];
  800a680:	4a23      	ldr	r2, [pc, #140]	; (800a710 <EC200_UART_Handler+0x108>)
  800a682:	68fb      	ldr	r3, [r7, #12]
  800a684:	4413      	add	r3, r2
@@ -26920,7 +26920,7 @@ void EC200_UART_Handler(uint8_t rx_char)
  800a6c0:	60bb      	str	r3, [r7, #8]
  800a6c2:	e00b      	b.n	800a6dc <EC200_UART_Handler+0xd4>
                 {
-                    MQTT_Response_Command[i] = MQTT_DataProcessing_Array[i];
+                    MQTT_Response_Command[i] = EC200_DataProcessing_Array[i];
  800a6c4:	4a12      	ldr	r2, [pc, #72]	; (800a710 <EC200_UART_Handler+0x108>)
  800a6c6:	68bb      	ldr	r3, [r7, #8]
  800a6c8:	4413      	add	r3, r2
@@ -26943,7 +26943,7 @@ void EC200_UART_Handler(uint8_t rx_char)
                 }
             }
             /* Clear unnecessary data in buffer */
-            memset(MQTT_DataProcessing_Array, 0, strlen(MQTT_DataProcessing_Array));
+            memset(EC200_DataProcessing_Array, 0, strlen(EC200_DataProcessing_Array));
  800a6e8:	4809      	ldr	r0, [pc, #36]	; (800a710 <EC200_UART_Handler+0x108>)
  800a6ea:	f7f5 fda3 	bl	8000234 <strlen>
  800a6ee:	4603      	mov	r3, r0

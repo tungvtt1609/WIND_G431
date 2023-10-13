@@ -12,7 +12,8 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-#define COMMAND_SIZE 1024
+// #define COMMAND_SIZE 1024
+#define COMMAND_SIZE 600
 
 /* PE2 is configured as POWER_PIN */
 #define EC200_RESET_PIN RESET_4G
@@ -25,8 +26,34 @@ extern "C"
 typedef struct
 {
     uint16_t Upcoming_Data_Count;
-    volatile bool Is_Receive_Done;
 }EC200_preprocessing_data_t;
+
+typedef struct
+{
+    volatile bool Is_Data_From_Server;
+    volatile bool Is_Data_From_Command;
+}MQTT_received_data_type_t;
+
+typedef struct
+{
+    volatile bool Is_Data_From_Server;
+    volatile bool Is_Data_From_Command;
+}FTP_received_data_type_t;
+
+typedef enum
+{
+    MQTT_APPLICATION_OCCUR = 0, /* Default running if FTP application not occur */
+    FTP_APPLICATION_OCCUR
+} current_application_occur_e;
+
+/**
+ * FTP output mode to seperate upcoming data
+*/
+typedef enum
+{
+    FTP_COMMAND_MODE = 0,
+    FTP_DATA_MODE
+}ftp_output_mode_e;
 
 /***********************************************************************************************************************
  * Initialization functions
