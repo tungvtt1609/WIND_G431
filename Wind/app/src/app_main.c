@@ -38,7 +38,7 @@ void AppMainInit(){
 		MainAddBackgroundProcess(&ModbusBackground);
 		MainAddBackgroundProcess(&UpdateAllVariable);
 
-//		MainAddBackgroundProcess(&TEST);
+		MainAddBackgroundProcess(&TEST);
 //		send_data();
 //		MainAddBackgroundProcess(&receive_string_data);
 		Timer1kHzAddCallback(&Modbus1kHz);
