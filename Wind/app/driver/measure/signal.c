@@ -18,13 +18,13 @@ float g_temp2;
 float g_windspeed;
 float g_freq;
 
-#define ADC_FULLSCALE_VALUE		4096
+#define ADC_FULLSCALE_VALUE		4095
 
 adc_signal_type_t g_signal_value[SIGNAL_MAX] = {
-		{VIN,						ADC_ID_2,		ADC_CH_3, 			0,		&g_vin,				0,						201.3		},
-		{VOUT,						ADC_ID_1,		ADC_CH_1,			0,		&g_vout,		  	0,						102.3		},
-		{ILOAD,						ADC_ID_2,		ADC_CH_17,			0,		&g_iload,			0, 						64.7058		},
-		{IDUMP,						ADC_ID_2,		ADC_CH_13,			0,		&g_idumpload,		0,						64.7058		},
+		{VIN,						ADC_ID_2,		ADC_CH_3, 			0,		&g_vin,				0,						201.3	},
+		{VOUT,						ADC_ID_1,		ADC_CH_1,			0,		&g_vout,		  	0,						102.3}, // 102.3*0.635
+		{ILOAD,						ADC_ID_2,		ADC_CH_17,			0,		&g_iload,			151.88, 						64.7058},
+		{IDUMP,						ADC_ID_2,		ADC_CH_13,			0,		&g_idumpload,		0,						64.7058},
 		{TEMP1,						ADC_ID_2,		ADC_CH_4,			0,		&g_temp1,			0,						0			},
 		{TEMP2,						ADC_ID_1,		ADC_CH_2,			0,		&g_temp2,			0,						0			},
 		{WIND_SPEED,				ADC_ID_1,		ADC_CH_15,			0,		&g_windspeed,		0,						0			},

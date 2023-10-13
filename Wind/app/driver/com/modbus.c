@@ -9,12 +9,12 @@
 #include "driver/control/pin_func.h"
 #include "stdlib.h"
 
-#define RXSIZE          150
-#define TXSIZE          150
-#define RXTIMEOUT       10   //ms
-#define TXTIMEOUT       10   //ms
+#define RXSIZE          100
+#define TXSIZE          100
+#define RXTIMEOUT       500   //ms
+#define TXTIMEOUT       500   //ms
 
-#define MAX_VAR_SHOW        6
+#define MAX_VAR_SHOW        10
 
 typedef struct
 {
@@ -25,7 +25,7 @@ typedef struct
 
 typedef struct m_modbus_obj
 {
-	modbus_master_obj modbus;
+	modbus_slave_obj modbus;
     uint8_t rdata[RXSIZE];
     uint8_t sdata[TXSIZE];
     int rcount, tick;
@@ -38,6 +38,7 @@ static DataModBus data_list[MAX_VAR_SHOW];
 
 static int current_index_modbus_dev = 0;
 static m_modbus_obj* modbus_list[MAX_MODBUS_DEV];
+
 
 static void ModbusSendData(m_modbus_obj *mb_obj);
 static void ModbusCreateData(m_modbus_obj *mb_obj);
@@ -142,14 +143,6 @@ static void ModbusSetData(m_modbus_obj *mb_obj)
     }
 
     k = 7;
-//    memcpy(ptr_data + addrData, &(mb_obj->rdata[k]), 2*sizeData);
-//    for(j = 0; j < sizeData; j++)
-//    {
-//        *(ptr_data + addrData) = (mb_obj->rdata[k] << 8) + mb_obj->rdata[k+1];
-//        *(ptr_data + addrData + 1) = (mb_obj->rdata[k+2] << 8) + mb_obj->rdata[k+3];
-//        addrData += 2;
-//        k += 4;
-//    }
 
     for(j = 0; j < sizeData; j++)
     {
@@ -164,7 +157,7 @@ static void ModbusSetData(m_modbus_obj *mb_obj)
 
     mb_obj->sSend = i;
     if(mb_obj->modbus.SetReDe != NULL)
-    	mb_obj->modbus.SetReDe(1);
+    	mb_obj->modbus.SetReDe(0);
     mb_obj->RcvTask = &ModbusSendData;
     mb_obj->tick = 0;
     mb_obj->scount = 0;
@@ -183,7 +176,6 @@ static void ModbusCreateData(m_modbus_obj *mb_obj)
     }
 
     addrData = mb_obj->rdata[2] << 8 | mb_obj->rdata[3];
-//    addrData = mb_obj->rdata[3] ;
     sizeData = mb_obj->rdata[4] << 8 | mb_obj->rdata[5];
 
     mb_obj->sdata[i++] = sizeData * 2;
@@ -220,13 +212,12 @@ static void ModbusCreateData(m_modbus_obj *mb_obj)
         i += 2;
         addrData += 1;
     }
-//    memcpy(&mb_obj->sdata[i], (uint16_t*)ptr_data + addrData, 2*sizeData);
-//    i += 2*sizeData;
+
     crc = calcCRC(mb_obj->sdata, i);
     mb_obj->sdata[i++] = (crc >> 8) & 0xFF;
     mb_obj->sdata[i++] = crc & 0xFF;
     if(mb_obj->modbus.SetReDe != NULL)
-    	mb_obj->modbus.SetReDe(1);
+    	mb_obj->modbus.SetReDe(0);
     mb_obj->sSend = i;
     mb_obj->RcvTask = &ModbusSendData;
     mb_obj->tick = 0;
@@ -238,7 +229,7 @@ static void ModbusSendData(m_modbus_obj *mb_obj) // Task 1
     if(mb_obj->tick >= TXTIMEOUT)
     {
     	if(mb_obj->modbus.SetReDe != NULL)
-    		mb_obj->modbus.SetReDe(0);
+    		mb_obj->modbus.SetReDe(1);
         mb_obj->RcvTask = &ModbusGetData;
         mb_obj->scount = 0;
         mb_obj->tick = 0;
@@ -253,7 +244,7 @@ static void ModbusSetReDe(uint32_t level)
 		Pin_Func_TurnOff(CONTROL_485);
 }
 
-modbus_master_obj* create_modbus(uint16_t id, serial_obj *serial)
+modbus_slave_obj* create_modbus(uint16_t id, serial_obj *serial)
 {
 	if(current_index_modbus_dev >= MAX_MODBUS_DEV)
 	{
@@ -330,7 +321,8 @@ void ModbusBackground(void)
 	}
 }
 
-void ModbusAddVariable(modbus_master_obj *obj, uint16_t addr, void *data, uint16_t len)
+
+void ModbusAddVariable(modbus_slave_obj *obj, uint16_t addr, void *data, uint16_t len)
 {
     if(current_index_list_var >= MAX_VAR_SHOW) return;
     data_list[current_index_list_var].start_addr = addr;
@@ -338,5 +330,3 @@ void ModbusAddVariable(modbus_master_obj *obj, uint16_t addr, void *data, uint16
     data_list[current_index_list_var].len = len;
     current_index_list_var++;
 }
-
-

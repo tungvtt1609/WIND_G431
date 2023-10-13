@@ -22,7 +22,7 @@
 
 
 
-void PwmWindDumpLoadInit(timer_advance_obj_t *timeradvanceX);
+void PwmWindDumpLoadInit(timer_advance_obj_t *timeradvanceX,pTIMER_ADVANCE_EVENT_INT_HANDLE DumpCtrlFn);
 void PwmWindDumpLoadEnableOutput(timer_advance_obj_t *timeradvanceX);
 void PwmWindDumpLoadDisableOutput(timer_advance_obj_t *timeradvanceX);
 

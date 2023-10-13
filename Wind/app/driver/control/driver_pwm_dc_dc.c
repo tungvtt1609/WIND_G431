@@ -8,17 +8,24 @@
 
 #include <driver/control/driver_pwm_dc_dc.h>
 
-void PwmWindBuckInit(timer_advance_obj_t *timeradvanceX, pTIMER_ADVANCE_EVENT_INT_HANDLE WindBuckCtrlFn){
-	if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_1){
+void PwmWindBuckBoostInit(timer_advance_obj_t *timeradvanceX, pTIMER_ADVANCE_EVENT_INT_HANDLE WindBuckCtrlFn){
+	if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_1)
+	{
 		Tim1CCIsr = WindBuckCtrlFn;
 		SetCompareCH4(timeradvanceX,0);
+//		SetCompareCH1N(timeradvanceX,0);
+//		SetCompareCH2N(timeradvanceX,0);
 	}
-	else if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_2){
-		Tim15CCIsr = WindBuckCtrlFn;
+	else if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_2)
+	{
+		Tim8CCIsr = WindBuckCtrlFn;
 
+	}
+	else if (timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_3)
+	{
+		Tim15CCIsr = WindBuckCtrlFn;
 	}
 	PwmWindBuckBoostDisableAllOutput(timeradvanceX);
-
 //	PwmWindBuckDisable(timeradvanceX);
 	SetCompareCH3(timeradvanceX, 0);
 	EnableCntTimer(timeradvanceX);
@@ -27,25 +34,23 @@ void PwmWindBuckInit(timer_advance_obj_t *timeradvanceX, pTIMER_ADVANCE_EVENT_IN
 
 }
 
-void PwmWindBoostInit(timer_advance_obj_t *timeradvanceX, pTIMER_ADVANCE_EVENT_INT_HANDLE WindBoostCtrlFn){
-	if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_1){
-		Tim1CCIsr = WindBoostCtrlFn;
-//		SetCompareCH4(timeradvanceX, timeradvanceX->TimerPeriod - 1);
-		SetCompareCH4(timeradvanceX, 0);
-	}
-	else if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_2){
-		Tim15CCIsr = WindBoostCtrlFn;
-	}
-	PwmWindBuckBoostDisableAllOutput(timeradvanceX);
-//	PwmWindBoostDisable(timeradvanceX);
-	SetCompareCH3(timeradvanceX, 1);
-	EnableCntTimer(timeradvanceX);
-	TIM_ClearFlag_CC3(timeradvanceX);
-	TIM_EnableIT_CC3(timeradvanceX);
-
-}
-
-
+//void PwmWindBoostInit(timer_advance_obj_t *timeradvanceX, pTIMER_ADVANCE_EVENT_INT_HANDLE WindBoostCtrlFn){
+//	if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_1){
+//		Tim1CCIsr = WindBoostCtrlFn;
+//		SetCompareCH4(timeradvanceX, 0);
+//	}
+//	else if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_2){
+//		Tim15CCIsr = WindBoostCtrlFn;
+//	}
+//	PwmWindBuckBoostDisableAllOutput(timeradvanceX);
+////	PwmWindBoostDisable(timeradvanceX);
+//	SetCompareCH3(timeradvanceX, 0);
+//	EnableCntTimer(timeradvanceX);
+//	TIM_ClearFlag_CC3(timeradvanceX);
+//	TIM_EnableIT_CC3(timeradvanceX);
+//
+//}
+//
 
 void PwmWindBuckBoostEnableAllOutput(timer_advance_obj_t *timeradvanceX){
 	EnableTimerChanel(timeradvanceX);
@@ -57,6 +62,8 @@ void PwmWindBuckBoostDisableAllOutput(timer_advance_obj_t *timeradvanceX){
 	DisableCH1NAndCH2NOutputs(timeradvanceX);
 }
 
+
+
 void PwmWindBuckEnable(timer_advance_obj_t *timeradvanceX){
 	EnableTimerChanel(timeradvanceX);
 	EnableCH2NOutput(timeradvanceX);
@@ -67,6 +74,8 @@ void PwmWindBoostEnable(timer_advance_obj_t *timeradvanceX){
 	EnableCH1NOutput(timeradvanceX);
 }
 
+
+
 void PwmWindBuckDisable(timer_advance_obj_t *timeradvanceX)
 {
 	DisableCH2NOutput(timeradvanceX);
@@ -75,7 +84,6 @@ void PwmWindBoostDisable(timer_advance_obj_t *timeradvanceX)
 {
 	DisableCH1NOutput(timeradvanceX);
 }
-
 
 //void PwmWindBuckSetDuty(timer_advance_obj_t *timeradvanceX, float Duty) {
 //

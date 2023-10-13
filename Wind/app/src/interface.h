@@ -23,7 +23,8 @@ typedef struct{
 	float guiIload;
 	float guiIdump;
 	float guiPwind;
-	float guiDref;
+	float guiPout;
+	float guiVmpptOut;
 	float guiErrCode;
 	float guiStatus;
 }ManagerVariable;
@@ -36,12 +37,14 @@ typedef enum{
 
 
 
-void send_data(void);
+//void send_data(void);
 void read_data(void);
 void serial_init();
 void initGlobalVariables(void);
 void UpdateAllVariable(void);
 void INF_Process(void);
 void INF_Time1kHz(void);
+void test_wind(void);
+void TEST(void);
 
 #endif /* SRC_INTERFACE_H_ */

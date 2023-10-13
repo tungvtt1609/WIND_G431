@@ -18,9 +18,9 @@
 #include "stdint.h"
 
 typedef void (*pTIMER_ADVANCE_EVENT_INT_HANDLE)();
-//typedef void (*pTIMER_ADVANCE_TRIPZONE_INT_HANDLE)();
 
 extern pTIMER_ADVANCE_EVENT_INT_HANDLE Tim1CCIsr;
+extern pTIMER_ADVANCE_EVENT_INT_HANDLE Tim8CCIsr;
 extern pTIMER_ADVANCE_EVENT_INT_HANDLE Tim15CCIsr;
 
 
@@ -30,7 +30,8 @@ extern pTIMER_ADVANCE_EVENT_INT_HANDLE Tim15CCIsr;
 
 typedef enum TIMER_ADVANCE_ID_E {
 	TIMER_ADVANCE_ID_1 = 0,		//Tim1
-	TIMER_ADVANCE_ID_2,			//Tim15
+	TIMER_ADVANCE_ID_2,			//Tim8
+	TIMER_ADVANCE_ID_3,			//Tim15
 	TIMER_ADVANCE_ID_MAX,
 }TIMER_ADVANCE_ID_E;
 
@@ -115,6 +116,10 @@ __STATIC_INLINE void EnableCH2NOutput(timer_advance_obj_t *advancetimerobjX)
 	SET_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH2N);
 }
 
+__STATIC_INLINE void EnableCH3NOutput(timer_advance_obj_t *advancetimerobjX)
+{
+	SET_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH3N);
+}
 
 __STATIC_INLINE void EnableCH4Output(timer_advance_obj_t *advancetimerobjX)
 {
@@ -130,6 +135,11 @@ __STATIC_INLINE void EnableCH4NOutput(timer_advance_obj_t *advancetimerobjX)
 __STATIC_INLINE void EnableCH1AndCH4Outputs(timer_advance_obj_t *advancetimerobjX)
 {
 	SET_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH1|LL_TIM_CHANNEL_CH4);
+}
+
+__STATIC_INLINE void EnableCH1AndCH3NOutputs(timer_advance_obj_t *advancetimerobjX)
+{
+	SET_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH1|LL_TIM_CHANNEL_CH3N);
 }
 
 __STATIC_INLINE void EnableCH1NAndCH2NOutputs(timer_advance_obj_t *advancetimerobjX)
@@ -165,6 +175,11 @@ __STATIC_INLINE void DisableCH2NOutput(timer_advance_obj_t *advancetimerobjX)
 	CLEAR_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH2N);
 }
 
+__STATIC_INLINE void DisableCH3NOutput(timer_advance_obj_t *advancetimerobjX)
+{
+	CLEAR_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH3N);
+}
+
 __STATIC_INLINE void DisableCH4Output(timer_advance_obj_t *advancetimerobjX)
 {
 	CLEAR_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH4);
@@ -178,6 +193,11 @@ __STATIC_INLINE void DisableCH4NOutput(timer_advance_obj_t *advancetimerobjX)
 __STATIC_INLINE void DisableCH1AndCH2Outputs(timer_advance_obj_t *advancetimerobjX)
 {
 	CLEAR_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH1|LL_TIM_CHANNEL_CH2);
+}
+
+__STATIC_INLINE void DisableCH1AndCH3NOutputs(timer_advance_obj_t *advancetimerobjX)
+{
+	CLEAR_BIT(advancetimerobjX->advtimer->CCER, LL_TIM_CHANNEL_CH1|LL_TIM_CHANNEL_CH3N);
 }
 
 __STATIC_INLINE void DisableCH1NAndCH2NOutputs(timer_advance_obj_t *advancetimerobjX)

@@ -49,6 +49,7 @@ typedef enum gpio_state{
 
 #define PULL_UP   	GPIO_PULLUP
 #define PULL_DOWN 	GPIO_PULLDOWN
+#define NO_PULL		GPIO_NOPULL
 
 typedef struct gpio_pin
 {

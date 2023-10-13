@@ -8,9 +8,10 @@
 #include "timer.h"
 #include "stdbool.h"
 #include "stddef.h"
+#include "driver/control/pin_func.h"
+#include "main.h"
 
 #define MAX_TIMER_SERVICE					5
-
 
 
 static TimerfuncCb fnFunctionTimer1kHzISR[MAX_TIMER_SERVICE] = {NULL};
@@ -29,6 +30,7 @@ bool Timer1kHzAddCallback(TimerfuncCb fn)
 	return false;
 }
 
+
 void TimerTick1kHz()
 {
 	int i = 0;
@@ -37,6 +39,8 @@ void TimerTick1kHz()
 		if (fnFunctionTimer1kHzISR[i] != NULL)
 		{
 			fnFunctionTimer1kHzISR[i]();
+
+
 		}
 	}
 }

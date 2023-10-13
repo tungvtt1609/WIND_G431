@@ -47,14 +47,15 @@ static FUNCTION_RETURN StateReset(void);
 static FUNCTION_RETURN ErrorFunction(void);
 
 STATE_MACHINE state_list[STATE_MAX] =
-    {
-        // id									next								    back								time_running	   fn						   need true all time      Error_code
-        {STATE_WIND_OFF,                        STATE_CHECK_WIND,                       STATE_WIND_OFF,                     100,               &WindOff,                   true,                   CODE_OK},
-        {STATE_CHECK_WIND,                      STATE_CLOSE_LOOP,                       STATE_RESET,                        100,               &CheckWind,                 true,                   NoWindInput},
-        {STATE_CLOSE_LOOP,                      STATE_CLOSE_LOOP,                       STATE_RESET,                        100,               &CloseLoop,                 true,                   CODE_OK},
-        {STATE_RESET,                           STATE_WIND_OFF,                         STATE_ERR,                          100,               &StateReset,                true,                   CODE_ERR},
-        {STATE_ERR,                             STATE_ERR,                              STATE_ERR,                          100,               &ErrorFunction,             false,                  CODE_ERR}};
-
+	{
+		// id									next								back							time_running		fn						need true all time
+		{STATE_WIND_OFF, 				STATE_CHECK_WIND, 			STATE_WIND_OFF, 		100, 					&WindOff, 			true, 			CODE_OK},
+		{STATE_CHECK_WIND, 				STATE_CLOSE_LOOP, 			STATE_RESET, 			100, 					&CheckWind, 		true, 			NoWindInput},
+		{STATE_CLOSE_LOOP, 				STATE_CLOSE_LOOP, 			STATE_RESET, 			100, 					&CloseLoop, 		true, 			CODE_OK},
+//		{STATE_DUMPLOAD, 				 STATE_CLOSE_LOOP, 			STATE_, 			100, 					&CloseLoop, 		true, 			CODE_OK},
+		{STATE_RESET,					STATE_WIND_OFF,				STATE_ERR,				100,					&StateReset,		true,			CODE_ERR},
+		{STATE_ERR,						STATE_ERR,					STATE_ERR,				100,					&ErrorFunction,		false,			CODE_ERR}
+	};
 void StateInit(void)
 {
     g_current_state = STATE_WIND_OFF;
@@ -136,13 +137,13 @@ static void StateMachineRunning()
             break;
         }
     }
-
     if (prv_state != g_current_state)
     {
         tick = 0;
         prv_state = g_current_state;
         IsStartState = true;
     }
+
 }
 
 static FUNCTION_RETURN WindOff(void)
@@ -157,157 +158,110 @@ static FUNCTION_RETURN WindOff(void)
 
 static FUNCTION_RETURN CheckWind(void)
 {
-    if (g_wind.vwt > DC_MIN_INPUT && g_wind.vwt < DC_MAX_INPUT)
-    {
-        WindControlInit(&g_wind);
-    }
 
-    if (g_wind.is_plugin == true)
-    {
-        return FUNCTION_DONE;
-    }
-    else
-    {
-        if(g_wind.vwt > DC_MAX_INPUT)
-        {
-            faultInfo = CODE_OVDC1;
-            Pin_Func_TurnOff(LED1);
-        }
-        else if(g_wind.vwt <= DC_MIN_INPUT)
-        {
-            faultInfo = NoWindInput;
-            Pin_Func_TurnOff(LED1);
-            Pin_Func_TurnOff(LED2);
-            Pin_Func_TurnOff(LED3);
-        }
-    }
-		if(g_vout > BAT_MIN_INPUT && g_vout < BAT_MAX_INPUT )
+	if (g_wind.vwt > DC_MIN_INPUT  && g_wind.vwt < DC_MAX_INPUT)
 		{
-				g_state_bat = true;
+			WindControlInit(&g_wind);
+		}
+		if (g_wind.is_plugin == true)
+		{
+			return FUNCTION_DONE;
 		}
 		else
 		{
-				g_state_bat = false;
+			if(g_wind.vwt == 0)
+			{
+				faultInfo = NoWindInput;
+//				Pin_Func_TurnOff(LED1);
+//				Pin_Func_TurnOff(LED2);
+//				Pin_Func_TurnOff(LED3);
+			}
+			return FUNCTION_FAIL;
 		}
-		if(g_state_bat == true)
-		{
-				return FUNCTION_DONE;
-		}
-		else
-		{
-				faultInfo = NoBatInput;
-		}
-    return FUNCTION_FAIL;
 }
+
 
 static FUNCTION_RETURN CloseLoop(void)
 {
-    static uint32_t count_wind = 0;
-    if(g_wind.vwt > DC_MIN_INPUT && g_wind.vwt < DC_MAX_INPUT && g_state_bat == true)
-    {
-        g_wind.is_plugin = true;
-        faultInfo = CODE_OK;
-    }
-    else{
-        g_wind.is_plugin = false;
-    }
 
-    if(g_wind.is_plugin == true)
-    {
-        if(g_vout < MAX_VOUT && g_iload < MAX_ILOAD)
-        {
-            faultInfo = CODE_OK;
-            DcDc_ControllerMppt();
-			DC_StartPWM_Boost();
-			DC_StartPWM_Buck();
-        }
-        else
-        {
-            if(g_vout > MAX_VOUT)
-            {
-                faultInfo = CODE_OVDC2;
-                DC_StopPWM_Buck();
-                DC_StopPWM_Boost();
-                Pin_Func_TurnOn(LED2);
-            }
-            else if(g_iload > MAX_ILOAD)
-            {
-                faultInfo = CODE_OCDC1;
-                DC_StopPWM_Buck();
-                DC_StopPWM_Boost();
-                Pin_Func_TurnOn(LED3);
-            }
-            return FUNCTION_FAIL;
-        }
-    }
-    else
-    {
-        if(g_wind.vwt > DC_MAX_INPUT)
-        {
-			count_wind++;
-			if(count_wind > 300)
-			{
-				faultInfo = CODE_OVDC1;
-				DC_StopPWM_Buck();
-				DC_StopPWM_Boost();
-				Pin_Func_TurnOn(LED1);
+//			if(g_wind.vwt > DC_MIN_INPUT && g_wind.vwt < DC_MAX_INPUT && g_state_bat == true){
+//				g_wind.is_plugin  = true;
+//			}
+//			else
+//			{
+//				g_wind.is_plugin = false;
+//			}
+			if (g_wind.is_plugin  == true){
+				if (g_vout < MAX_VOUT && g_iload < MAX_ILOAD){
+//					Pin_Func_TurnOn(LED1);
+					Pin_Func_TurnOn(LED2);
+					Pin_Func_TurnOff(LED3);
+					DC_StartPWM_Buck();
+					DC_StartPWM_Boost();
+					DcDc_MPPT_Controller();
+
+					return FUNCTION_DONE;
+				}
+				else if (g_vout > MAX_VOUT){						// Over voltage	output
+
+						faultInfo = CODE_OVDC2;
+						return FUNCTION_FAIL;
+				}
+				else if (g_iload > MAX_ILOAD){					// Over current output
+						faultInfo = CODE_OCDC1;
+						return FUNCTION_FAIL;
+					}
 			}
 			else
 			{
-				Dumpload_controller();
+					return FUNCTION_FAIL;
 			}
-        }
-        else if(g_wind.vwt <= DC_MIN_INPUT)
-        {
-            faultInfo = NoWindInput;
-            DC_StopPWM_Buck();
-            DC_StopPWM_Boost();
-            Pin_Func_TurnOn(LED1);
-            Pin_Func_TurnOn(LED2);
-            Pin_Func_TurnOn(LED3);
-        }
-		else if(g_wind.iwt > MAX_ILOAD)
-		{
-			faultInfo = CODE_OCDC1;
-		}
-        return FUNCTION_FAIL;
-    }
-    return FUNCTION_DONE;
+			return FUNCTION_DONE;
 }
 
 static FUNCTION_RETURN ErrorFunction(void)
 {
-    if (IsStartState == true)
-    {
-        DC_StopPWM_Buck();
-        DC_StopPWM_Boost();
-    }
-    if (faultInfo == CODE_OVDC1)
-    {
-    	Pin_Func_TurnOn(LED1);
-    }
-    if (faultInfo == CODE_OVDC2)
-    {
-    	Pin_Func_TurnOn(LED2);
-    }
-    if (faultInfo == CODE_OCDC1)
-    {
-    	Pin_Func_TurnOn(LED3);
-    }
-    return FUNCTION_FAIL;
+
+	if(IsStartState == true){
+			DC_StopPWM_Buck();
+			DC_StopPWM_Boost();
+		}
+			if(faultInfo == CODE_OVDC1){         // Over voltage input
+			Pin_Func_TurnOff(LED1);
+		}
+		if(faultInfo == CODE_OVDC2){					 // Over voltage output
+			Pin_Func_TurnOn(LED1);
+			Pin_Func_TurnOff(LED2);
+			Pin_Func_TurnOn(LED3);
+		}
+		if(faultInfo == CODE_OCDC1){					 // Over current output
+			Pin_Func_TurnOn(BUZZ);
+			Pin_Func_TurnOff(LED1);
+			Pin_Func_TurnOn(LED2);
+			Pin_Func_TurnOn(LED3);
+		}
+		return FUNCTION_FAIL;
 }
 
 static FUNCTION_RETURN StateReset(void)
 {
-    if (IsStartState == true)
-    {
-        DC_StopPWM_Buck();
-        DC_StopPWM_Boost();
-    }
-    return FUNCTION_DONE;
+	if(IsStartState == true){
+			DC_StopPWM_Buck();
+			DC_StopPWM_Boost();
+		}
+		if(faultInfo == CODE_OVDC1){						// Over voltage input
+			Pin_Func_TurnOff(LED1);
+		}
+		if(faultInfo == CODE_OVDC2){						// Over voltage output
+			Pin_Func_TurnOn(LED1);
+			Pin_Func_TurnOff(LED2);
+			Pin_Func_TurnOn(LED3);
+		}
+		if(faultInfo == CODE_OCDC1){						// Over current output
+			Pin_Func_TurnOff(LED1);
+			Pin_Func_TurnOn(BUZZ);
+			Pin_Func_TurnOn(LED2);
+			Pin_Func_TurnOn(LED3);
+		}
+		return FUNCTION_DONE;
 }
-
-//static void Run_Mode_Dumpload()
-//{
-//		Dumpload_controller();
-//}

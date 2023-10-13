@@ -30,5 +30,7 @@ serial_obj* create_serial(uint16_t port, uint32_t baudrate, uint16_t tx_size, ui
 bool SerialSendBuf(struct serial_obj* serial, uint8_t *data, uint16_t len);
 uint16_t SerialReadBuf(struct serial_obj* serial, uint8_t *data, uint16_t len);
 void SerialHandle(struct serial_obj* serial);
+void SendStringUart2(uint8_t *dat);
+
 
 #endif /* PORTING_SERIAL_SERIAL_H_ */

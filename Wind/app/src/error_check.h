@@ -16,37 +16,37 @@
 
 
 
-#define ERR_LOOP_DIV				5
+#define ERR_LOOP_DIV			5
 
-#define MAX_ILOAD					20
-#define MAX_IDUMP					2
-#define MAX_PIN 					1200
-#define MAX_POUT 					1200
-#define MAX_VIN						48
-#define MAX_VOUT					50
-#define MIN_VIN						0
-#define MIN_VOUT					0
-#define MIN_VAC						110
-#define MAX_VAC						264
-#define MIN_VAC_WRN 				187
-#define MAX_VAC_WRN					242
-#define MIN_FAC						0
-#define MAX_FAC						0
-#define MIN_FAC_WRN					0
-#define MAX_FAC_WRN					0
-#define MIN_ROTOR					0
-#define MAX_ROTOR					0
-#define HIGH_TEMP1					0
-#define HIGH_TEMP2					0
-#define LOW_TEMP1					0
-#define LOW_TEMP2					0
+#define MAX_ILOAD				50
+#define MAX_IDUMP				2
+#define MAX_PIN 				1200
+#define MAX_POUT 				1200
+#define MAX_VIN					200
+#define MAX_VOUT				65
+#define MIN_VIN					0
+#define MIN_VOUT				0
+#define MIN_VAC					110
+#define MAX_VAC					264
+#define MIN_VAC_WRN 			187
+#define MAX_VAC_WRN				242
+#define MIN_FAC					0
+#define MAX_FAC					0
+#define MIN_FAC_WRN				0
+#define MAX_FAC_WRN				0
+#define MIN_ROTOR				0
+#define MAX_ROTOR				0
+#define HIGH_TEMP1				0
+#define HIGH_TEMP2				0
+#define LOW_TEMP1				0
+#define LOW_TEMP2				0
 
-#define TIME_ZERO					0
-#define TIME_1_S					(1000/ERR_LOOP_DIV)
-#define TIME_VDC_WARNING			(1000/ERR_LOOP_DIV)
-#define TIME_FAC_WARNING			(1800000/ERR_LOOP_DIV)
-#define TIME_TEMP_CHK     			(1000/ERR_LOOP_DIV)
-#define TIME_START_0				(0/ERR_LOOP_DIV)
+#define TIME_ZERO				0
+#define TIME_1_S				(1000/ERR_LOOP_DIV)
+#define TIME_VDC_WARNING		(1000/ERR_LOOP_DIV)
+#define TIME_FAC_WARNING		(1800000/ERR_LOOP_DIV)
+#define TIME_TEMP_CHK           (1000/ERR_LOOP_DIV)
+#define TIME_START_0			(0/ERR_LOOP_DIV)
 
 typedef enum {
 	ID_OK = 0,

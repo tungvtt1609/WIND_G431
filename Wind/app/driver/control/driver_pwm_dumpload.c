@@ -8,21 +8,30 @@
 
 #include "driver_pwm_dumpload.h"
 
-void PwmWindDumpLoadInit(timer_advance_obj_t *timeradvanceX){
-//	if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_1){
-//		Tim1CCIsr = WindDumpLoadCtrlFn;
-//	}
-//	else if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_2){
-//		Tim4CCIsr = WindDumpLoadCtrlFn;
-//	}
-
+void PwmWindDumpLoadInit(timer_advance_obj_t *timeradvanceX, pTIMER_ADVANCE_EVENT_INT_HANDLE DumpCtrlFn){
+	if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_1)
+	{
+		Tim1CCIsr = DumpCtrlFn;
+	}
+	else if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_2)
+	{
+		Tim8CCIsr = DumpCtrlFn;
+		SetCompareCH1(timeradvanceX,0);
+	}
+	else if(timeradvanceX->advance_timer_id == TIMER_ADVANCE_ID_3)
+	{
+		Tim15CCIsr = DumpCtrlFn;
+	}
 	PwmWindDumpLoadDisableOutput(timeradvanceX);
-	SetCompareCH2(timeradvanceX, 0);
+
+//	PwmWindBuckDisable(timeradvanceX);
+//	SetCompareCH3(timeradvanceX, 0);
 	EnableCntTimer(timeradvanceX);
-//	TIM_ClearFlag_CC2(timeradvanceX);
-//	TIM_EnableIT_CC2(timeradvanceX);
+//	TIM_ClearFlag_CC3(timeradvanceX);
+//	TIM_EnableIT_CC3(timeradvanceX);
 
 }
+
 void PwmWindDumpLoadEnableOutput(timer_advance_obj_t *timeradvanceX)
 {
 	EnableTimerChanel(timeradvanceX);

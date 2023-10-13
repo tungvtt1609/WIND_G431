@@ -7,8 +7,9 @@
 
 #include <serial/serial.h>
 #include "main.h"
+#include "lib/EC200_common/EC200_uart.h"
 
-#define USE_FIFO
+//#define USE_FIFO
 
 //Porting hardware
 //extern UART_HandleTypeDef huart1;
@@ -46,7 +47,7 @@ static uint8_t uart3_data_rx_isr_buff[2];
 #endif
 
 static stm_uart_obj uart_list[DEV_SERIAL] = {
-		{{0, 9600, 0, 0, 0}, 1, &OpenUart2, &SendByteUart2, &ReceiveByteUart2, null, null},
+		{{0, EC200_UART_BAUDRATE, 0, 0, 0}, 1, &OpenUart2, &SendByteUart2, &ReceiveByteUart2, null, null},
 		{{1, 9600, 0, 0, 0}, 1, &OpenUart3, &SendByteUart3, &ReceiveByteUart3, null, null}
 };
 
@@ -84,6 +85,16 @@ static bool SendByteUart2(uint8_t byte)
 	if(ret == HAL_OK)
 		return true;
 	return false;
+}
+
+void SendStringUart2(uint8_t *dat)
+{
+	int i=0;
+	while(dat[i] != null)
+	{
+		SendByteUart2(dat[i]);
+		i++;
+	}
 }
 
 // unuse funtion ReceiveByteUart1 to read, use HAL_UART_RxCpltCallback interrupt to receive and put to fifo
@@ -149,22 +160,31 @@ static bool ReceiveByteUart3(uint8_t *byte)
 
 
 #ifndef USE_FIFO
+//uint8_t uart_rx_1;
+uint8_t uart_rx[30];
+uint8_t uart_rx_cnt = 0;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart == &huart3)
 	{
-		fifo *rx = uart_list[1].rx_buf;
-		HAL_UART_Receive_IT(huart, uart3_data_rx_isr_buff, 1);
-		rx->Put(rx, uart3_data_rx_isr_buff);
-		uart_list[1].serial_port.length_received = rx->data_len;
+
+		HAL_UART_Receive_IT(huart, &uart_rx[uart_rx_cnt], 1);
+		if (++uart_rx_cnt>=30) uart_rx_cnt=0;
+
+//		fifo *rx = uart_list[1].rx_buf;
+//		HAL_UART_Receive_IT(huart, uart3_data_rx_isr_buff, 1);
+//		rx->Put(rx, uart3_data_rx_isr_buff);
+//		uart_list[1].serial_port.length_received = rx->data_len;
 		return;
 	}
 
 	if(huart == &huart2)
 	{
-		fifo *rx = uart_list[0].rx_buf;
-		rx->Put(rx, uart2_data_rx_isr_buff);
-		uart_list[0].serial_port.length_received = rx->data_len;
+//		fifo *rx = uart_list[0].rx_buf;
+//		rx->Put(rx, uart2_data_rx_isr_buff);
+//		uart_list[0].serial_port.length_received = rx->data_len;
+//		HAL_UART_Receive_IT(huart, uart2_data_rx_isr_buff, 1);
+		EC200_UART_Handler(uart2_data_rx_isr_buff[0]);
 		HAL_UART_Receive_IT(huart, uart2_data_rx_isr_buff, 1);
 	}
 }

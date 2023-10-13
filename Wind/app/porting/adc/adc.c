@@ -31,7 +31,7 @@ typedef struct adc_id_inf_t {
 }adc_id_inf_t;
 
 static adc_id_inf_t adc_id_inf[2] = {
-	{ADC_ID_1, &hadc1, 1, {{ ADC_CH_1, RANK_1}, { ADC_CH_2, RANK_2}, {ADC_CH_3}, {ADC_CH_4}, {ADC_CH_5, RANK_3}, {ADC_CH_6}, {ADC_CH_7}, {ADC_CH_8},{ADC_CH_9},{ADC_CH_10},{ADC_CH_11},{ADC_CH_12},{ADC_CH_13},{ADC_CH_14},{ADC_CH_15,RANK_4},{ADC_CH_16},{ADC_CH_17} }},
+	{ADC_ID_1, &hadc1, 1, {{ ADC_CH_1, RANK_1}, { ADC_CH_2, RANK_2}, {ADC_CH_3}, {ADC_CH_4}, {ADC_CH_5}, {ADC_CH_6}, {ADC_CH_7}, {ADC_CH_8},{ADC_CH_9},{ADC_CH_10},{ADC_CH_11},{ADC_CH_12},{ADC_CH_13},{ADC_CH_14},{ADC_CH_15,RANK_3},{ADC_CH_16},{ADC_CH_17} }},
 	{ADC_ID_2, &hadc2, 1, {{ ADC_CH_1}, { ADC_CH_2}, {ADC_CH_3, RANK_1}, {ADC_CH_4, RANK_2}, {ADC_CH_5}, {ADC_CH_6}, {ADC_CH_7}, {ADC_CH_8},{ADC_CH_9},{ADC_CH_10},{ADC_CH_11},{ADC_CH_12},{ADC_CH_13, RANK_3},{ADC_CH_14},{ADC_CH_15},{ADC_CH_16},{ADC_CH_17,RANK_4} }},
 };
 

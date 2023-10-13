@@ -13,6 +13,6 @@
 #include <stdint.h>
 
 #define null			0
-
+#define FWVER			1
 #endif /* TYPES_H_ */
 

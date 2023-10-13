@@ -60,7 +60,7 @@ static ListError listError[ID_MAX] = {
 		{ID_OVDC1,				CODE_OVDC1,					STATE_MAX,				MAX_VIN,				TYPE_UP,				TIME_ZERO,						TIME_START_0,				LEVEL_0,				&s_mError[ID_OVDC1],					NULL,			false,			ACTIVE},
 		{ID_OVDC2,				CODE_OVDC2,					STATE_MAX, 				MAX_VOUT,				TYPE_UP,				TIME_ZERO,						TIME_START_0,				LEVEL_0,				&s_mError[ID_OVDC2],					NULL,			false,			ACTIVE},
 //		{ID_UVDC1,				CODE_UVDC1,					STATE_MAX,				MIN_VIN,				TYPE_DOWN,			TIME_VDC_WARNING,			TIME_START_0,				LEVEL_0,				&s_mError[ID_UVDC1],					NULL,			false,			ACTIVE},
-		{ID_UVDC2,				CODE_UVDC2,					STATE_MAX,				MIN_VOUT,				TYPE_DOWN,				TIME_VDC_WARNING, 				TIME_START_0,				LEVEL_0,				&s_mError[ID_UVDC2],					NULL,			false,			ACTIVE},
+//		{ID_UVDC2,				CODE_UVDC2,					STATE_MAX,				MIN_VOUT,				TYPE_DOWN,				TIME_VDC_WARNING, 				TIME_START_0,				LEVEL_0,				&s_mError[ID_UVDC2],					NULL,			false,			ACTIVE},
 
 //		{ID_OVAC_BEGIN,		CODE_OVAC_BEGIN,		STATE_CHECK_ERR,	MAX_VAC_WRN,		TYPE_UP,				TIME_ZERO,						TIME_START_0,				LEVEL_0,				&s_mError[ID_OVAC_BEGIN],			NULL,			false,			ACTIVE},
 //		{ID_OVAC_RUNNING,	CODE_OVAC_RUNNING,	STATE_ALL,				MAX_VAC,				TYPE_UP,				TIME_ZERO,						TIME_START_0, 			LEVEL_0,				&s_mError[ID_OVAC_RUNNING],		NULL,			false,			ACTIVE},

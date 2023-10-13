@@ -13,7 +13,7 @@
 #define MAX_BACKGOUND_TASK	6
 typedef void (*BackgroundCb)(void);
 
-extern modbus_master_obj* debug_modbus;
+extern modbus_slave_obj* debug_modbus;
 
 void AppMainInit();
 void AppMainProcess();
