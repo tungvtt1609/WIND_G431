@@ -40,6 +40,12 @@ typedef struct
     volatile bool Is_Data_From_Command;
 }FTP_received_data_type_t;
 
+typedef struct
+{
+    uint16_t Upcoming_ServerData_Count;
+    uint16_t EndOfStream_Position;
+}FTP_preprocessing_data_t;
+
 typedef enum
 {
     MQTT_APPLICATION_OCCUR = 0, /* Default running if FTP application not occur */

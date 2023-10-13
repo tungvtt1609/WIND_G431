@@ -13,6 +13,10 @@ ftp_output_mode_e ftp_output_mode = FTP_COMMAND_MODE;
 FTP_received_data_type_t FTP_received_data_type = {false, false};
 MQTT_received_data_type_t MQTT_received_data_type = {false, false};
 serial_obj *serial_EC200;
+/* FTP data count for receiving content from server */
+FTP_preprocessing_data_t FTP_preprocessing_data = {0, 0};
+
+/* Extern variables */
 
 /*******************************************************************************
  * Variables
@@ -82,16 +86,22 @@ void EC200_UART_Handler(uint8_t rx_char)
         }
         else if (current_application_occur == FTP_APPLICATION_OCCUR) /* FTP occurs UART interrupt resource */
         {
-            /* Receive data from Server */
-            if (ftp_output_mode == FTP_DATA_MODE)
+            if (strstr(EC200_DataProcessing_Array, "\r\nCONNECT\r\n") != NULL)
             {
-                FTP_received_data_type.Is_Data_From_Server = true;
-
+                ftp_output_mode = FTP_DATA_MODE;
+                FTP_preprocessing_data.Upcoming_ServerData_Count = 0;
                 memset(FTP_Response_Server, 0, strlen(FTP_Response_Server));
-                for (int i = 0; i < EC200_preprocessing_data.Upcoming_Data_Count; i++)
+            }
+            else if (ftp_output_mode == FTP_DATA_MODE) /* Receive data from Server */
+            {
+                FTP_Response_Server[FTP_preprocessing_data.Upcoming_ServerData_Count] = rx_char;
+                if (rx_char == '+') /* Significant character to detect end of stream */
                 {
-                    FTP_Response_Server[i] = EC200_DataProcessing_Array[i];
+                    FTP_preprocessing_data.EndOfStream_Position = FTP_preprocessing_data.Upcoming_ServerData_Count;
+                    FTP_received_data_type.Is_Data_From_Server = true;
                 }
+
+                FTP_preprocessing_data.Upcoming_ServerData_Count++;
             }
             else if (ftp_output_mode == FTP_COMMAND_MODE) /* Receive data from Command response */
             {
@@ -111,4 +121,3 @@ void EC200_UART_Handler(uint8_t rx_char)
         EC200_preprocessing_data.Upcoming_Data_Count = 0;
     }
 }
-
