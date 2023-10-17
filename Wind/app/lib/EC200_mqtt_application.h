@@ -132,7 +132,7 @@ typedef struct
 typedef struct
 {
     uint8_t flag; //flag
-    uint32_t CRC32; //crc32
+    char CRC32[4]; //crc32
 }updatefw_received_data_t;
 
 

@@ -827,7 +827,10 @@ mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "crc32", (char *)JSON_value))
                     {
-                        updatefw_data_receive_buffer->CRC32 = atoi(JSON_value);
+                        for (int i = 0; i < 4; i++)
+                        {
+                            updatefw_data_receive_buffer->CRC32[i] = JSON_value[i];
+                        }
                     }
 
                     return_function = UPDATE_FW_DATA;
