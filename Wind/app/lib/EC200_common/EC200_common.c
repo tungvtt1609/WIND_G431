@@ -27,7 +27,7 @@ void EC200_Delayms(uint32_t mili_sec) /* Abstract function */
 
 void EC200_RESET(void)
 {
-	EC200_UART_Init();
+    EC200_UART_Init();
     /* Turn on the Power */
     EC200_POWER_PIN_LOW();
     EC200_Delayms(1000U);
@@ -40,7 +40,6 @@ void EC200_RESET(void)
 
 void EC200_Init(void)
 {
-    EC200_UART_Init();
     /* Reset EC200 module */
     EC200_RESET();
 }
@@ -123,7 +122,7 @@ bool Is_Power_ON(void)
             return_function = true;
         }
     }
-    /* Timeout  */
+    /* Timeout */
     if (ec200_timeout == 0)
     {
         EC200_RESET();
@@ -191,7 +190,7 @@ bool EC200_SIM_Start(void)
         if (Is_Power_ON())
         {
             ec200_simStart_desired_state = EC200_POWERED_ON;
-            ec200_simStart_state = EC200_DELAY; /* Delay after each state */ 
+            ec200_simStart_state = EC200_DELAY; /* Delay after each state */
         }
         break;
     case EC200_POWERED_ON:
@@ -209,12 +208,11 @@ bool EC200_SIM_Start(void)
 
     case EC200_DELAY:
         delay_process.is_enable = true;
-        if(delay_process.delay_count == 0)
+        if (delay_process.delay_count == 0)
         {
             ec200_simStart_state = ec200_simStart_desired_state;
             delay_process.is_enable = false;
             delay_process.delay_count = EC200_DELAY_OF_SEQUENCE;
-
         }
         break;
 
@@ -228,19 +226,19 @@ bool EC200_SIM_Start(void)
     return return_function;
 }
 
-
+extern uint32_t sending_period;
 void EC200_Time_Base_1ms(void)
 {
-    if(enable_timeout == true)
+    if (enable_timeout == true)
     {
-        if(ec200_timeout > 0)
+        if (ec200_timeout > 0)
         {
             ec200_timeout--;
         }
     }
-    if(delay_process.is_enable == true)
+    if (delay_process.is_enable == true)
     {
-        if(delay_process.delay_count > 0)
+        if (delay_process.delay_count > 0)
         {
             delay_process.delay_count--;
         }
@@ -249,5 +247,8 @@ void EC200_Time_Base_1ms(void)
     {
         delay_process.delay_count = EC200_DELAY_OF_SEQUENCE;
     }
+    if (sending_period > 0)
+    {
+        sending_period--;
+    }
 }
-

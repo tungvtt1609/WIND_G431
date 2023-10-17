@@ -616,7 +616,7 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
             memset(battery_data_buffer, 0, 200);
 
             battery_data_temp = (battery_send_data_t *)mqtt_data_struct;
-            sprintf(battery_data_buffer, "{\"serial\":\"002\",\"type\":\"battery\",\"batt_status\":\"%d\",\"batt_power\":\"%d\",\"batt_volt\":\"%d\",\"batt_curr\":\"%d\",\"batt_temp\":\"%d\"}", battery_data_temp->state, battery_data_temp->power, battery_data_temp->voltage, battery_data_temp->current, battery_data_temp->temperature);
+            sprintf(battery_data_buffer, "{\"serial\":\"002\",\"type\":\"battery\",\"batt_status\":\"%d\",\"batt_power\":\"%d\",\"batt_volt\":\"%d\",\"batt_curr\":\"%d\"}", battery_data_temp->state, battery_data_temp->power, battery_data_temp->voltage, battery_data_temp->current);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
@@ -639,7 +639,7 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
             memset(wind_data_buffer, 0, 200);
 
             wind_data_temp = (wind_send_data_t *)mqtt_data_struct;
-            sprintf(wind_data_buffer, "{\"serial\":\"002\",\"type\":\"wind\",\"wind_rpm\":\"%d\",\"wind_power\":\"%d\",\"wind_volt\":\"%d\",\"wind_curr\":\"%d\"}", wind_data_temp->speed, wind_data_temp->power, wind_data_temp->voltage, wind_data_temp->current);
+            sprintf(wind_data_buffer, "{\"serial\":\"002\",\"type\":\"wind\",\"wind_rpm\":\"%d\",\"wind_power\":\"%d\",\"wind_volt\":\"%d\"}", wind_data_temp->speed, wind_data_temp->power, wind_data_temp->voltage);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
@@ -662,7 +662,8 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
             memset(system_data_buffer, 0, 200);
 
             system_data_temp = (system_send_data_t *)mqtt_data_struct;
-            sprintf(system_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\",\"sys_mosfet_temp\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature);
+            sprintf(system_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\",\"sys_mosfet_temp\":\"%d\",\"gen_speed\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature, system_data_temp->rpm_gen);
+            //            sprintf(system_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {

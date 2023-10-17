@@ -14,6 +14,7 @@ RM := rm -rf
 -include app/porting/serial/subdir.mk
 -include app/porting/gpio/subdir.mk
 -include app/porting/adc/subdir.mk
+-include app/lib/EC200_common/subdir.mk
 -include app/lib/subdir.mk
 -include app/driver/measure/subdir.mk
 -include app/driver/control/subdir.mk

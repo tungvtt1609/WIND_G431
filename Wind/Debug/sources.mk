@@ -31,6 +31,7 @@ app/driver/com \
 app/driver/control \
 app/driver/measure \
 app/lib \
+app/lib/EC200_common \
 app/porting/adc \
 app/porting/gpio \
 app/porting/serial \

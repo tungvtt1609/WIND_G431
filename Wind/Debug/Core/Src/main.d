@@ -50,14 +50,15 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h \
  D:/7.GITHUB/WIND_G431/Wind/app/common/common.h \
  D:/7.GITHUB/WIND_G431/Wind/app/common/fifo.h \
- D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_application.h \
- D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_uart.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_mqtt_application.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_common/EC200_common.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_common/EC200_uart.h \
  D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h \
  D:/7.GITHUB/WIND_G431/Wind/app/src/interface.h \
  D:/7.GITHUB/WIND_G431/Wind/app/driver/measure/signal.h \
  D:/7.GITHUB/WIND_G431/Wind/app/porting/adc/adc.h \
  D:/7.GITHUB/WIND_G431/Wind/app/src/wind_mppt.h \
- D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_JSON_parsing.h
+ D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_common/EC200_JSON_parsing.h
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -110,11 +111,12 @@ D:/7.GITHUB/WIND_G431/Wind/app/driver/com/modbus.h:
 D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h:
 D:/7.GITHUB/WIND_G431/Wind/app/common/common.h:
 D:/7.GITHUB/WIND_G431/Wind/app/common/fifo.h:
-D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_application.h:
-D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_uart.h:
+D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_mqtt_application.h:
+D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_common/EC200_common.h:
+D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_common/EC200_uart.h:
 D:/7.GITHUB/WIND_G431/Wind/app/porting/serial/serial.h:
 D:/7.GITHUB/WIND_G431/Wind/app/src/interface.h:
 D:/7.GITHUB/WIND_G431/Wind/app/driver/measure/signal.h:
 D:/7.GITHUB/WIND_G431/Wind/app/porting/adc/adc.h:
 D:/7.GITHUB/WIND_G431/Wind/app/src/wind_mppt.h:
-D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_JSON_parsing.h:
+D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_common/EC200_JSON_parsing.h:

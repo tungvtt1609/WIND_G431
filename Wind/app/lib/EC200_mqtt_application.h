@@ -45,7 +45,6 @@ typedef enum
     UPDATE_FW_DATA
 } mqtt_transferring_data_e;
 
-
 /************************************* Data format to send *****************************************/
 
 typedef enum
@@ -68,13 +67,13 @@ typedef enum
 {
     SYS_CODE_OK = 0,
     SYS_NO_WIND_INPUT,
-	SYS_NO_BAT,
-	SYS_CODE_OVDC1,
-	SYS_CODE_OVDC2,
-	SYS_CODE_UVDC1,
-	SYS_CODE_UVDC2,
-	SYS_CODE_OCDC1,
-	SYS_CODE_OCDC2
+    SYS_NO_BAT,
+    SYS_CODE_OVDC1,
+    SYS_CODE_OVDC2,
+    SYS_CODE_UVDC1,
+    SYS_CODE_UVDC2,
+    SYS_CODE_OCDC1,
+    SYS_CODE_OCDC2
 } system_error_code_e;
 
 /* MQTT transferring data structs */
@@ -83,19 +82,19 @@ typedef enum
 typedef struct
 {
     battery_capacity_e state;
-    uint16_t power; //(W) 
+    uint16_t power;   //(W)
     uint16_t voltage; //(V)
     uint16_t current; //(A)
-    uint8_t temperature;
-}battery_send_data_t;
+    //    uint8_t temperature;
+} battery_send_data_t;
 
 typedef struct
 {
-    uint16_t speed; //(RPM)
-    uint16_t power; //(W) 
+    uint16_t speed;   //(RPM)
+    uint16_t power;   //(W)
     uint16_t voltage; //(V)
-    uint16_t current; //(A)
-}wind_send_data_t;
+    //    uint16_t current; //(A)
+} wind_send_data_t;
 
 typedef struct
 {
@@ -103,38 +102,39 @@ typedef struct
     system_error_code_e error_code;
     uint16_t total_energy; //(kWh)
     uint16_t temperature;
-}system_send_data_t;
+    uint16_t rpm_gen;
+    //    uint16_t temperature_boost;
+} system_send_data_t;
 
 /***************** Received data ********************/
 typedef struct
 {
-    uint16_t capacity; //cap(Ah) 
-    uint16_t over_voltage; //ov_vol(Vol)
-    uint16_t under_voltage; //ud_vol(Vol)
+    uint16_t capacity;      // cap(Ah)
+    uint16_t over_voltage;  // ov_vol(Vol)
+    uint16_t under_voltage; // ud_vol(Vol)
 
-}battery_received_data_t;
-
-typedef struct
-{
-    uint16_t max_voltage; //max_vol(Vol)
-    uint16_t max_current; //max_cur(Ampe)
-    char generator_pole[50]; //pole
-    uint16_t start_charging_voltage; //chrg_vol(Vol)
-    uint16_t max_rotate_speed; //max_spd(rpm)
-}wind_received_data_t;
+} battery_received_data_t;
 
 typedef struct
 {
-    uint16_t over_output_voltage; //ov_out_vol(Vol)
-    char address_controller_modbus[50]; //add_ctler_mdbus
-}system_received_data_t;
+    uint16_t max_voltage;            // max_vol(Vol)
+    uint16_t max_current;            // max_cur(Ampe)
+    char generator_pole[50];         // pole
+    uint16_t start_charging_voltage; // chrg_vol(Vol)
+    uint16_t max_rotate_speed;       // max_spd(rpm)
+} wind_received_data_t;
 
 typedef struct
 {
-    uint8_t flag; //flag
-    char CRC32[4]; //crc32
-}updatefw_received_data_t;
+    uint16_t over_output_voltage;       // ov_out_vol(Vol)
+    char address_controller_modbus[50]; // add_ctler_mdbus
+} system_received_data_t;
 
+typedef struct
+{
+    uint8_t flag;  // flag
+    char CRC32[4]; // crc32
+} updatefw_received_data_t;
 
 /********************************************* USER FUNCTIONS ***************************************************/
 void MQTT_Trigger_SIM_Restart(void);

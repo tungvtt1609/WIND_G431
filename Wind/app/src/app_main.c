@@ -18,6 +18,7 @@
 #include "driver/com/modbus.h"
 
 
+
 modbus_master_obj* debug_modbus;
 serial_obj *serial_test_1;
 serial_obj *serial_test_2;
@@ -31,17 +32,13 @@ static void MainAddBackgroundProcess(BackgroundCb fn);
 void AppMainInit(){
 
 		serial_init();
-//	  	serial_test_1 = create_serial(1, 115200, 512, 512);
 		debug_modbus = create_modbus(118, serial_test_1);
 		EC200_Init();
 		initGlobalVariables();
 		MainAddBackgroundProcess(&ModbusBackground);
 		MainAddBackgroundProcess(&UpdateAllVariable);
-
-		MainAddBackgroundProcess(&TEST);
-//		send_data();
-//		MainAddBackgroundProcess(&receive_string_data);
 		Timer1kHzAddCallback(&Modbus1kHz);
+		Timer1kHzAddCallback(&EC200_Time_Base_1ms);
 
 		Pin_Func_Init();
 		Signal_Init();
@@ -49,8 +46,6 @@ void AppMainInit(){
 //		ControlDcDcBuckInit();
 //		ControlDcDcDumpInit();
 		StateInit();
-
-
 }
 
 void AppMainProcess(){

@@ -1,0 +1,5 @@
+../app/lib/EC200_common/EC200_uart.c:26:6:EC200_UART_InitPins	1
+../app/lib/EC200_common/EC200_uart.c:31:6:EC200_RESET_InitPins	1
+../app/lib/EC200_common/EC200_uart.c:36:6:EC200_UART_Init	1
+../app/lib/EC200_common/EC200_uart.c:45:6:EC200_UART_SendString	1
+../app/lib/EC200_common/EC200_uart.c:50:6:EC200_UART_Handler	17

@@ -46,7 +46,7 @@ app/porting/serial/serial.o: ../app/porting/serial/serial.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dma.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dmamux.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h \
- D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_uart.h \
+ D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_common/EC200_uart.h \
  D:/7.GITHUB/WIND_G431/Wind/app/src/interface.h \
  D:/7.GITHUB/WIND_G431/Wind/app/driver/control/pin_func.h \
  D:/7.GITHUB/WIND_G431/Wind/app/porting/gpio/gpio.h \
@@ -102,7 +102,7 @@ D:/7.GITHUB/WIND_G431/Wind/app/types.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dma.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_dmamux.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_exti.h:
-D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_uart.h:
+D:/7.GITHUB/WIND_G431/Wind/app/lib/EC200_common/EC200_uart.h:
 D:/7.GITHUB/WIND_G431/Wind/app/src/interface.h:
 D:/7.GITHUB/WIND_G431/Wind/app/driver/control/pin_func.h:
 D:/7.GITHUB/WIND_G431/Wind/app/porting/gpio/gpio.h:

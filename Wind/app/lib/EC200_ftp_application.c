@@ -1,18 +1,31 @@
 #include "EC200_ftp_application.h"
 
 ftp_loginServer_state_e ftp_loginServer_state = FTP_LOGIN_IDLE;
-ftp_downloadFile_state_e ftp_downloadFile_state = FTP_DOWNLOAD_IDLE;
-ftp_bootloader_processing_t ftp_bootloader_processing = {false, false, 0};
+ftp_bootloader_processing_t ftp_bootloader_processing = {0x00, 0xFFFFFFFF};
 
 /* Extern variables */
 extern uint8_t EC200_Command_Buffer[RECEIVE_SIZE];
 extern uint8_t FTP_Response_Server[COMMAND_SIZE];
+extern ec200_simStart_state_e ec200_simStart_state;
 extern ftp_output_mode_e ftp_output_mode;
 extern FTP_received_data_type_t FTP_received_data_type;
 extern FTP_preprocessing_data_t FTP_preprocessing_data;
 /* Timeout variables */
 extern bool enable_timeout;
 extern uint32_t ec200_timeout;
+extern FLASH_PART_e part_select;
+extern uint8_t reset_sim_countdown;
+void FTP_Trigger_SIM_Restart(void)
+{
+    /* Reset EC200 module using RESET PIN */
+    EC200_RESET();
+    ec200_timeout = EC200_RESET_TIMEOUT;
+    reset_sim_countdown = EC200_RESET_COUNTDOWN;
+    enable_timeout = false;
+    ftp_loginServer_state = FTP_LOGIN_IDLE;
+    ec200_simStart_state = EC200_POWER_OFF;
+    EC200_Delayms(1000); /* So important */
+}
 
 /******************************************** Setup functions ****************************************************/
 
@@ -502,49 +515,9 @@ boolean_3_state_e FTP_List_Filename_Directory(uint8_t *dir)
     return return_function;
 }
 
-// /**
-//  * Get the content of a file.
-//  * @download_len: not greater than 500 bytes
-//  */
-// boolean_3_state_e FTP_Get_Content_InFile(uint8_t *filename, uint8_t *local_name, uint16_t start_position, uint16_t download_len)
-// {
-//     boolean_3_state_e return_function = _NOT_DEFINE_;
-//     static uint8_t get_file_step = 0;
-//     uint8_t buff_temp[50];
-
-//     static uint32_t current_loading_position = 0;
-
-//     if (get_file_step == 0)
-//     {
-//         memset(buff_temp, 0, 50);
-//         sprintf(buff_temp, "AT+QFTPGET=%s,%s,%d,%d\r", filename, local_name, start_position, download_len);
-//         EC200_SendCommand(buff_temp);
-//         get_file_step = 1;
-//     }
-//     else if (get_file_step == 1)
-//     {
-//         if (FTP_received_data_type.Is_Data_From_Server == true)
-//         {
-//             if (strstr(&FTP_Response_Server[FTP_preprocessing_data.EndOfStream_Position], "+QFTPGET: 0") != NULL)
-//             {
-//                 /* Delay to get entire received data frame */
-//                 EC200_Delayms(5);
-//                 FTP_received_data_type.Is_Data_From_Server = false;
-//                 FTP_preprocessing_data.EndOfStream_Position = 0;
-//                 ftp_output_mode = FTP_COMMAND_MODE;
-
-//                 get_file_step = 0;
-//                 return_function = _TRUE_;
-
-//             }
-//         }
-//     }
-//     return return_function;
-// }
-
 /**
  * Get the content of a file.
- * @download_len: not greater than 500 bytes
+ * @download_len: not greater than 480 bytes
  * @return: the length of data field
  */
 uint16_t FTP_Get_Content_InFile(uint8_t *filename, uint8_t *local_name, uint32_t start_position, uint16_t download_len)
@@ -569,7 +542,21 @@ uint16_t FTP_Get_Content_InFile(uint8_t *filename, uint8_t *local_name, uint32_t
                 /* Delay to get entire received data frame */
                 EC200_Delayms(5);
                 get_file_step = 0;
-                return_function = (FTP_preprocessing_data.EndOfStream_Position - 8);
+                if (strstr(&FTP_Response_Server[FTP_preprocessing_data.EndOfStream_Position], "+QFTPGET: 0,0") != NULL) /* File empty */
+                {
+                    return_function = 550; /* Assume return value = 550 that represents for end of file if the file size % 480 = 0 */
+                }
+                else
+                {
+                    /* Return must be a value <= 480 */
+                    return_function = (FTP_preprocessing_data.EndOfStream_Position - 8);
+                }
+            }
+            if (strstr(&FTP_Response_Server[FTP_preprocessing_data.EndOfStream_Position], "+QFTPGET: 627,550") != NULL) /* Assume the end of the file is reached and the file size % 480 = 0 */
+            {
+                get_file_step = 0;
+                /* Return a value > 480*/
+                return_function = 550; /* Assume return value = 550 that represents for end of file if the file size % 480 = 0 */
             }
         }
     }
@@ -590,11 +577,16 @@ bool EC200_FTP_ConnectToServer(void)
             if (check_result == _TRUE_)
             {
                 ftp_loginServer_state = FTP_SET_TCPIP_DONE;
+                reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
             else if (check_result == _FALSE_)
             {
-                /* TODO: Reset SIM or the procedure if error occurs too many times */
+                reset_sim_countdown--;
+                if (reset_sim_countdown == 0)
+                {
+                    ftp_loginServer_state = FTP_RESET;
+                }
             }
 
             break;
@@ -604,11 +596,16 @@ bool EC200_FTP_ConnectToServer(void)
             if (check_result == _TRUE_)
             {
                 ftp_loginServer_state = FTP_ACTIVATED_PDP;
+                reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
             else if (check_result == _FALSE_)
             {
-                /* TODO: Reset SIM or the procedure if error occurs too many times */
+                reset_sim_countdown--;
+                if (reset_sim_countdown == 0)
+                {
+                    ftp_loginServer_state = FTP_RESET;
+                }
             }
 
             break;
@@ -618,11 +615,16 @@ bool EC200_FTP_ConnectToServer(void)
             if (check_result == _TRUE_)
             {
                 ftp_loginServer_state = FTP_CONFIGURED;
+                reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
             else if (check_result == _FALSE_)
             {
-                /* TODO: Reset SIM or the procedure if error occurs too many times */
+                reset_sim_countdown--;
+                if (reset_sim_countdown == 0)
+                {
+                    ftp_loginServer_state = FTP_RESET;
+                }
             }
 
             break;
@@ -632,11 +634,16 @@ bool EC200_FTP_ConnectToServer(void)
             if (check_result == _TRUE_)
             {
                 ftp_loginServer_state = FTP_LOGIN_SERVER_DONE;
+                reset_sim_countdown = EC200_RESET_COUNTDOWN;
                 EC200_Delayms(500); /* Delay after each state */
             }
             else if (check_result == _FALSE_)
             {
-                /* TODO: Reset SIM or the procedure if error occurs too many times */
+                reset_sim_countdown--;
+                if (reset_sim_countdown == 0)
+                {
+                    ftp_loginServer_state = FTP_RESET;
+                }
             }
 
             break;
@@ -644,6 +651,10 @@ bool EC200_FTP_ConnectToServer(void)
         case FTP_LOGIN_SERVER_DONE:
             return_function = true;
 
+            break;
+
+        case FTP_RESET:
+            FTP_Trigger_SIM_Restart();
             break;
 
         default:
@@ -655,60 +666,106 @@ bool EC200_FTP_ConnectToServer(void)
 }
 
 /************************************************************* User functions *************************************************************/
-void EC200_Write_To_Memory(uint8_t *buffer, uint16_t dataField_len)
+void EC200_Write_To_Memory(uint8_t *buffer, uint32_t addr_offset, uint16_t dataField_len)
 {
-    ;
+    BL_MEM_Part_Write(part_select, addr_offset, buffer, dataField_len);
 }
 
-bool Verify_CRC32(uint32_t CRC32)
+void EC200_Read_From_Memory(uint8_t *buffer, uint32_t addr_offset, uint16_t dataField_len)
+{
+    BL_MEM_Part_Read(part_select, addr_offset, buffer, dataField_len);
+}
+
+void EC200_Calculate_CRC32(const uint8_t *data, uint32_t dataSize)
+{
+    static bool init_crc = false;
+    if (init_crc == false)
+    {
+        crc32cal_Init();
+        init_crc = true;
+    }
+
+    crc32cal_WriteData(data, dataSize);
+}
+
+uint32_t EC200_Get_CRC32(void)
+{
+    return crc32cal_Get32bitResult();
+}
+
+bool EC200_Verify_CRC32(uint32_t CRC32)
 {
     bool return_function = false;
-
-    /*TEST*/
-    return_function = true;
-
+    if (ftp_bootloader_processing.CRC32 == CRC32)
+    {
+        return_function = true;
+    }
     return return_function;
 }
 
 bool Update_Firmware(uint8_t *filename)
 {
-    /*TEST*/
-    ftp_bootloader_processing.firmware_update_enable = true;
-    ftp_bootloader_processing.is_received_CRC32 = true;
-
     bool return_function = false;
     uint32_t downloaded_bytes = 0;
     uint16_t number_bytes = 0;
-    if ((ftp_bootloader_processing.firmware_update_enable == true) && (ftp_bootloader_processing.is_received_CRC32 == true))
+    uint16_t blocks = 0;
+    /* Read operation*/
+    uint8_t read_mem_buff[510];
+    uint16_t lastblock_bytes = 0;
+
+    /* Start update firmware */
+    memset(read_mem_buff, 0, 510);
+    /* Download executed file from Server and write to flash */
+    while (1)
     {
-        /* Download executed file from Server */
-        while (1)
+        number_bytes = FTP_Get_Content_InFile(filename, "COM:", downloaded_bytes, BYTES_BLOCK);
+        if (number_bytes > 0) /* Received data successfully when number bytes greater than 0 */
         {
-            number_bytes = FTP_Get_Content_InFile(filename, "COM:", downloaded_bytes, 500);
-            if (number_bytes > 0) /* Received data successfully when number bytes greater than 0 */
+            if (number_bytes <= BYTES_BLOCK)
             {
-                downloaded_bytes = downloaded_bytes + number_bytes;
+                EC200_Write_To_Memory(FTP_Response_Server, downloaded_bytes, number_bytes);
+                downloaded_bytes = (downloaded_bytes + number_bytes);
+            }
 
-                EC200_Write_To_Memory(FTP_Response_Server, number_bytes);
+            FTP_received_data_type.Is_Data_From_Server = false;
+            ftp_output_mode = FTP_COMMAND_MODE;
+            memset(FTP_Response_Server, 0, FTP_preprocessing_data.EndOfStream_Position + 15);
+            FTP_preprocessing_data.EndOfStream_Position = 0;
 
-                FTP_received_data_type.Is_Data_From_Server = false;
-                ftp_output_mode = FTP_COMMAND_MODE;
+            blocks++;
 
-                memset(FTP_Response_Server, 0, FTP_preprocessing_data.EndOfStream_Position + 15);
-                FTP_preprocessing_data.EndOfStream_Position = 0;
-
-                /* Detect end of file */
-                if (number_bytes < 500)
-                {
-                    number_bytes = 0;
-                    break;
-                }
+            /* Detect end of file */
+            if (number_bytes < BYTES_BLOCK)
+            {
+                lastblock_bytes = number_bytes;
+                break;
+            }
+            else if (number_bytes > BYTES_BLOCK)
+            {
+                lastblock_bytes = 0;
+                break;
             }
         }
-        if (Verify_CRC32(ftp_bootloader_processing.CRC32))
+    }
+    /* Read file.bin from flash */
+    for (int i = 0; i < blocks; i++)
+    {
+        if (i == (blocks - 1))
         {
-            return_function = true;
+            memset(read_mem_buff, 0, sizeof(read_mem_buff));
+            EC200_Read_From_Memory(read_mem_buff, BYTES_BLOCK * i, lastblock_bytes);
+            EC200_Calculate_CRC32(read_mem_buff, lastblock_bytes);
         }
+        else
+        {
+            EC200_Read_From_Memory(read_mem_buff, BYTES_BLOCK * i, BYTES_BLOCK);
+            EC200_Calculate_CRC32(read_mem_buff, BYTES_BLOCK);
+        }
+    }
+    /* Verify CRC32 */
+    if (EC200_Verify_CRC32(EC200_Get_CRC32()))
+    {
+        return_function = true;
     }
 
     return return_function;

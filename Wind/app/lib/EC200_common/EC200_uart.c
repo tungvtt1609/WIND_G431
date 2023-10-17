@@ -1,5 +1,4 @@
 #include "EC200_uart.h"
-#include "serial/serial.h"
 
 uint8_t EC200_DataProcessing_Array[COMMAND_SIZE];
 

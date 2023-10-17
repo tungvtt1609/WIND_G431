@@ -6,21 +6,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../app/lib/CNTL_2P2Z.c \
-../app/lib/EC200_JSON_parsing.c \
-../app/lib/EC200_application.c \
-../app/lib/EC200_uart.c 
+../app/lib/EC200_ftp_application.c \
+../app/lib/EC200_mqtt_application.c 
 
 OBJS += \
 ./app/lib/CNTL_2P2Z.o \
-./app/lib/EC200_JSON_parsing.o \
-./app/lib/EC200_application.o \
-./app/lib/EC200_uart.o 
+./app/lib/EC200_ftp_application.o \
+./app/lib/EC200_mqtt_application.o 
 
 C_DEPS += \
 ./app/lib/CNTL_2P2Z.d \
-./app/lib/EC200_JSON_parsing.d \
-./app/lib/EC200_application.d \
-./app/lib/EC200_uart.d 
+./app/lib/EC200_ftp_application.d \
+./app/lib/EC200_mqtt_application.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -30,7 +27,7 @@ app/lib/%.o app/lib/%.su app/lib/%.cyclo: ../app/lib/%.c app/lib/subdir.mk
 clean: clean-app-2f-lib
 
 clean-app-2f-lib:
-	-$(RM) ./app/lib/CNTL_2P2Z.cyclo ./app/lib/CNTL_2P2Z.d ./app/lib/CNTL_2P2Z.o ./app/lib/CNTL_2P2Z.su ./app/lib/EC200_JSON_parsing.cyclo ./app/lib/EC200_JSON_parsing.d ./app/lib/EC200_JSON_parsing.o ./app/lib/EC200_JSON_parsing.su ./app/lib/EC200_application.cyclo ./app/lib/EC200_application.d ./app/lib/EC200_application.o ./app/lib/EC200_application.su ./app/lib/EC200_uart.cyclo ./app/lib/EC200_uart.d ./app/lib/EC200_uart.o ./app/lib/EC200_uart.su
+	-$(RM) ./app/lib/CNTL_2P2Z.cyclo ./app/lib/CNTL_2P2Z.d ./app/lib/CNTL_2P2Z.o ./app/lib/CNTL_2P2Z.su ./app/lib/EC200_ftp_application.cyclo ./app/lib/EC200_ftp_application.d ./app/lib/EC200_ftp_application.o ./app/lib/EC200_ftp_application.su ./app/lib/EC200_mqtt_application.cyclo ./app/lib/EC200_mqtt_application.d ./app/lib/EC200_mqtt_application.o ./app/lib/EC200_mqtt_application.su
 
 .PHONY: clean-app-2f-lib
 

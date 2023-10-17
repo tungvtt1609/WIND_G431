@@ -7,7 +7,7 @@
 
 #include <serial/serial.h>
 #include "main.h"
-#include "lib/EC200_uart.h"
+#include "lib/EC200_common/EC200_uart.h"
 
 #define USE_FIFO
 

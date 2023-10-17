@@ -1,0 +1,10 @@
+../app/lib/EC200_common/EC200_common.c:23:6:EC200_Delayms	1
+../app/lib/EC200_common/EC200_common.c:28:6:EC200_RESET	1
+../app/lib/EC200_common/EC200_common.c:41:6:EC200_Init	1
+../app/lib/EC200_common/EC200_common.c:49:6:EC200_CompareCommand	2
+../app/lib/EC200_common/EC200_common.c:58:6:EC200_ReceiveCommand	8
+../app/lib/EC200_common/EC200_common.c:110:6:EC200_SendCommand	1
+../app/lib/EC200_common/EC200_common.c:116:6:Is_Power_ON	4
+../app/lib/EC200_common/EC200_common.c:141:19:OffEcho	6
+../app/lib/EC200_common/EC200_common.c:182:6:EC200_SIM_Start	8
+../app/lib/EC200_common/EC200_common.c:232:6:EC200_Time_Base_1ms	5
