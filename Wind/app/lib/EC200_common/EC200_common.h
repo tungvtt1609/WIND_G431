@@ -1,9 +1,6 @@
 #ifndef _EC200_COMMON_H_
 #define _EC200_COMMON_H_
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
 #include "EC200_uart.h"
 
 #define EC200_RESET_PIN_HIGH()   Pin_Func_TurnOn(EC200_RESET_PIN)
