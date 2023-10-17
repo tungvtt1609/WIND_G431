@@ -27,6 +27,7 @@ void EC200_Delayms(uint32_t mili_sec) /* Abstract function */
 
 void EC200_RESET(void)
 {
+	EC200_UART_Init();
     /* Turn on the Power */
     EC200_POWER_PIN_LOW();
     EC200_Delayms(1000U);

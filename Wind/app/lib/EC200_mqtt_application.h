@@ -41,7 +41,8 @@ typedef enum
     NONE_DATA = 0,
     BATTERY_DATA,
     WIND_DATA,
-    SYSTEM_DATA
+    SYSTEM_DATA,
+    UPDATE_FW_DATA
 } mqtt_transferring_data_e;
 
 
@@ -53,7 +54,6 @@ typedef enum
     BAT_NORMAL,
     BAT_FULL
 } battery_capacity_e;
-
 
 typedef enum
 {
@@ -76,8 +76,6 @@ typedef enum
 	SYS_CODE_OCDC1,
 	SYS_CODE_OCDC2
 } system_error_code_e;
-
-
 
 /* MQTT transferring data structs */
 
@@ -131,11 +129,17 @@ typedef struct
     char address_controller_modbus[50]; //add_ctler_mdbus
 }system_received_data_t;
 
+typedef struct
+{
+    uint8_t flag; //flag
+    uint32_t CRC32; //crc32
+}updatefw_received_data_t;
+
 
 /********************************************* USER FUNCTIONS ***************************************************/
 void MQTT_Trigger_SIM_Restart(void);
 bool EC200_MQTT_ConnectToServer(void);
 bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transferring_data_type);
-mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data_receive_buffer, wind_received_data_t *wind_data_receive_buffer, system_received_data_t *system_data_receive_buffer);
+mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data_receive_buffer, wind_received_data_t *wind_data_receive_buffer, system_received_data_t *system_data_receive_buffer, updatefw_received_data_t *updatefw_data_receive_buffer);
 
 #endif /* _EC200_APP_H_ */

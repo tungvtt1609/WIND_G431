@@ -152,7 +152,6 @@ boolean_3_state_e MQTT_Open(uint8_t client_id, char *host_name, uint16_t port)
             MQTT_open_step = 0;
             MQTT_Trigger_SIM_Restart();
         }
-        
     }
     return return_function;
 }
@@ -470,7 +469,6 @@ bool EC200_MQTT_ConnectToServer(void)
     bool return_function = false;
     boolean_3_state_e check_result = _NOT_DEFINE_;
 
-
     if (EC200_SIM_Start()) /* If EC200 has been successfully started */
     {
         switch (mqtt_connectServer_state)
@@ -483,7 +481,6 @@ bool EC200_MQTT_ConnectToServer(void)
                 mqtt_connectServer_desired_state = MQTT_SENT_KEEPALIVE;
                 mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-
             }
             else if (check_result == _FALSE_)
             {
@@ -502,7 +499,6 @@ bool EC200_MQTT_ConnectToServer(void)
                 mqtt_connectServer_desired_state = MQTT_SENT_RECEIVING_MODE;
                 mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-
             }
             else if (check_result == _FALSE_)
             {
@@ -517,12 +513,12 @@ bool EC200_MQTT_ConnectToServer(void)
 
         case MQTT_SENT_RECEIVING_MODE:
             check_result = MQTT_Open(CLIENT_ID, MQTT_BROKER, MQTT_PORT);
+
             if (check_result == _TRUE_)
             {
                 mqtt_connectServer_desired_state = MQTT_OPENED;
                 mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-
             }
             else if (check_result == _FALSE_)
             {
@@ -541,7 +537,6 @@ bool EC200_MQTT_ConnectToServer(void)
                 mqtt_connectServer_desired_state = MQTT_CONNECTED_DONE;
                 mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-
             }
             else if (check_result == _FALSE_)
             {
@@ -560,7 +555,6 @@ bool EC200_MQTT_ConnectToServer(void)
                 mqtt_connectServer_desired_state = MQTT_SUBCRIBED;
                 mqtt_connectServer_state = MQTT_DELAY; /* Delay after each state */
                 reset_sim_countdown = EC200_RESET_COUNTDOWN;
-
             }
             else if (check_result == _FALSE_)
             {
@@ -589,7 +583,6 @@ bool EC200_MQTT_ConnectToServer(void)
             break;
 
         case MQTT_RESET:
-
             MQTT_Trigger_SIM_Restart();
 
             break;
@@ -685,6 +678,10 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
             break;
         }
 
+        case UPDATE_FW_DATA:
+            /* Do nothing */
+            break;
+
         case NONE_DATA:
             break;
 
@@ -727,7 +724,7 @@ bool MQTT_Get_DataField(uint8_t *received_sub_buffer, uint8_t *dataField_buffer)
  * Get the received data if the data is available, data will be saved to a dedicated type buffer.
  * @return: Return the type of data.
  */
-mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data_receive_buffer, wind_received_data_t *wind_data_receive_buffer, system_received_data_t *system_data_receive_buffer)
+mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data_receive_buffer, wind_received_data_t *wind_data_receive_buffer, system_received_data_t *system_data_receive_buffer, updatefw_received_data_t *updatefw_data_receive_buffer)
 {
     mqtt_transferring_data_e return_function = NONE_DATA;
     uint8_t DataField_Buffer[260]; /* Buffer size is 260 due to maximum received size are 255 bytes */
@@ -818,6 +815,22 @@ mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data
                     }
 
                     return_function = SYSTEM_DATA;
+                }
+                else if (strcmp(JSON_value, "updatefw") == 0)
+                {
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "flag", (char *)JSON_value))
+                    {
+                        updatefw_data_receive_buffer->flag = atoi(JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "crc32", (char *)JSON_value))
+                    {
+                        updatefw_data_receive_buffer->CRC32 = atoi(JSON_value);
+                    }
+
+                    return_function = UPDATE_FW_DATA;
                 }
             }
         }
