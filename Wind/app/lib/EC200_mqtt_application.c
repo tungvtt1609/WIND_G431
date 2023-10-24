@@ -605,6 +605,9 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
     bool return_function = false;
     boolean_3_state_e check_result = _NOT_DEFINE_;
 
+    uint8_t transmit_data_buffer[200];
+    memset(transmit_data_buffer, 0, 200);
+
     if (mqtt_data_struct != NULL)
     {
         switch (transferring_data_type)
@@ -612,22 +615,9 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case BATTERY_DATA:
         {
             battery_send_data_t *battery_data_temp = NULL;
-            uint8_t battery_data_buffer[200];
-            memset(battery_data_buffer, 0, 200);
 
             battery_data_temp = (battery_send_data_t *)mqtt_data_struct;
-            sprintf((char *)battery_data_buffer, "{\"serial\":\"002\",\"type\":\"battery\",\"batt_status\":\"%d\",\"batt_power\":\"%d\",\"batt_volt\":\"%d\",\"batt_curr\":\"%d\"}", battery_data_temp->state, battery_data_temp->power, battery_data_temp->voltage, battery_data_temp->current);
-
-            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
-            {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
-                                             strlen((char *)battery_data_buffer), battery_data_buffer);
-            }
-
-            if (check_result == _TRUE_)
-            {
-                return_function = true;
-            }
+            sprintf((char *)transmit_data_buffer, "{\"serial\":\"002\",\"type\":\"battery\",\"batt_status\":\"%d\",\"batt_power\":\"%d\",\"batt_volt\":\"%d\",\"batt_curr\":\"%d\"}", battery_data_temp->state, battery_data_temp->power, battery_data_temp->voltage, battery_data_temp->current);
 
             break;
         }
@@ -635,22 +625,9 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case WIND_DATA:
         {
             wind_send_data_t *wind_data_temp = NULL;
-            uint8_t wind_data_buffer[200];
-            memset(wind_data_buffer, 0, 200);
 
             wind_data_temp = (wind_send_data_t *)mqtt_data_struct;
-            sprintf((char *)wind_data_buffer, "{\"serial\":\"002\",\"type\":\"wind\",\"wind_rpm\":\"%d\",\"wind_power\":\"%d\",\"wind_volt\":\"%d\"}", wind_data_temp->speed, wind_data_temp->power, wind_data_temp->voltage);
-
-            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
-            {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
-                                             strlen((char *)wind_data_buffer), wind_data_buffer);
-            }
-
-            if (check_result == _TRUE_)
-            {
-                return_function = true;
-            }
+            sprintf((char *)transmit_data_buffer, "{\"serial\":\"002\",\"type\":\"wind\",\"wind_rpm\":\"%d\",\"wind_power\":\"%d\",\"wind_volt\":\"%d\"}", wind_data_temp->speed, wind_data_temp->power, wind_data_temp->voltage);
 
             break;
         }
@@ -658,23 +635,9 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case SYSTEM_DATA:
         {
             system_send_data_t *system_data_temp = NULL;
-            uint8_t system_data_buffer[200];
-            memset(system_data_buffer, 0, 200);
 
             system_data_temp = (system_send_data_t *)mqtt_data_struct;
-            sprintf((char *)system_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\",\"sys_mosfet_temp\":\"%d\",\"gen_speed\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature, system_data_temp->rpm_gen);
-            //            sprintf(system_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature);
-
-            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
-            {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
-                                             strlen((char *)system_data_buffer), system_data_buffer);
-            }
-
-            if (check_result == _TRUE_)
-            {
-                return_function = true;
-            }
+            sprintf((char *)transmit_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\",\"sys_mosfet_temp\":\"%d\",\"gen_speed\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature, system_data_temp->rpm_gen);
 
             break;
         }
@@ -688,6 +651,17 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
 
         default:
             break;
+        }
+
+        while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
+        {
+            check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                         strlen((char *)transmit_data_buffer), transmit_data_buffer);
+        }
+
+        if (check_result == _TRUE_)
+        {
+            return_function = true;
         }
     }
     return return_function;
@@ -898,6 +872,9 @@ bool MQTT_ACK_To_Server(void *mqtt_data_struct, mqtt_transferring_data_e transfe
     bool return_function = false;
     boolean_3_state_e check_result = _NOT_DEFINE_;
 
+    uint8_t transmit_data_buffer[200];
+    memset(transmit_data_buffer, 0, 200);
+
     if (mqtt_data_struct != NULL)
     {
         switch (transferring_data_type)
@@ -905,22 +882,9 @@ bool MQTT_ACK_To_Server(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case BATTERY_DATA:
         {
             battery_received_data_t *battery_data_temp = NULL;
-            uint8_t battery_data_buffer[200];
-            memset(battery_data_buffer, 0, 200);
 
             battery_data_temp = (battery_received_data_t *)mqtt_data_struct;
-            sprintf((char *)battery_data_buffer, "{\"type\":\"battery\",\"serial\":\"002\",\"cap\":\"%d\",\"ov_vol\":\"%d\",\"ud_vol\":\"%d\"}", battery_data_temp->capacity, battery_data_temp->over_voltage, battery_data_temp->under_voltage);
-
-            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
-            {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
-                                             strlen((char *)battery_data_buffer), battery_data_buffer);
-            }
-
-            if (check_result == _TRUE_)
-            {
-                return_function = true;
-            }
+            sprintf((char *)transmit_data_buffer, "{\"type\":\"battery\",\"serial\":\"002\",\"cap\":\"%d\",\"ov_vol\":\"%d\",\"ud_vol\":\"%d\"}", battery_data_temp->capacity, battery_data_temp->over_voltage, battery_data_temp->under_voltage);
 
             break;
         }
@@ -928,22 +892,9 @@ bool MQTT_ACK_To_Server(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case WIND_DATA:
         {
             wind_received_data_t *wind_data_temp = NULL;
-            uint8_t wind_data_buffer[200];
-            memset(wind_data_buffer, 0, 200);
 
             wind_data_temp = (wind_received_data_t *)mqtt_data_struct;
-            sprintf((char *)wind_data_buffer, "{\"type\":\"wind\",\"serial\":\"002\",\"max_vol\":\"%d\",\"max_cur\":\"%d\",\"pole\":\"%s\",\"chrg_vol\":\"%d\",\"max_spd\":\"%d\"}", wind_data_temp->max_voltage, wind_data_temp->max_current, wind_data_temp->generator_pole, wind_data_temp->start_charging_voltage, wind_data_temp->max_rotate_speed);
-
-            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
-            {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
-                                             strlen((char *)wind_data_buffer), wind_data_buffer);
-            }
-
-            if (check_result == _TRUE_)
-            {
-                return_function = true;
-            }
+            sprintf((char *)transmit_data_buffer, "{\"type\":\"wind\",\"serial\":\"002\",\"max_vol\":\"%d\",\"max_cur\":\"%d\",\"pole\":\"%s\",\"chrg_vol\":\"%d\",\"max_spd\":\"%d\"}", wind_data_temp->max_voltage, wind_data_temp->max_current, wind_data_temp->generator_pole, wind_data_temp->start_charging_voltage, wind_data_temp->max_rotate_speed);
 
             break;
         }
@@ -951,22 +902,9 @@ bool MQTT_ACK_To_Server(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case SYSTEM_DATA:
         {
             system_received_data_t *system_data_temp = NULL;
-            uint8_t system_data_buffer[200];
-            memset(system_data_buffer, 0, 200);
 
             system_data_temp = (system_received_data_t *)mqtt_data_struct;
-            sprintf((char *)system_data_buffer, "{\"type\":\"system\",\"serial\":\"002\",\"max_vol_out\":\"%d\",\"max_cur_out\":\"%d\",\"ov_vol_out\":\"%d\",\"ov_cur_out\":\"%d\",\"ov_vol_in\":\"%d\",\"ov_cur_in\":\"%d\"}", system_data_temp->max_voltage_output, system_data_temp->max_current_output, system_data_temp->over_voltage_output, system_data_temp->over_current_output, system_data_temp->over_voltage_input, system_data_temp->over_current_input);
-
-            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
-            {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
-                                             strlen((char *)system_data_buffer), system_data_buffer);
-            }
-
-            if (check_result == _TRUE_)
-            {
-                return_function = true;
-            }
+            sprintf((char *)transmit_data_buffer, "{\"type\":\"system\",\"serial\":\"002\",\"max_vol_out\":\"%d\",\"max_cur_out\":\"%d\",\"ov_vol_out\":\"%d\",\"ov_cur_out\":\"%d\",\"ov_vol_in\":\"%d\",\"ov_cur_in\":\"%d\"}", system_data_temp->max_voltage_output, system_data_temp->max_current_output, system_data_temp->over_voltage_output, system_data_temp->over_current_output, system_data_temp->over_voltage_input, system_data_temp->over_current_input);
 
             break;
         }
@@ -974,22 +912,9 @@ bool MQTT_ACK_To_Server(void *mqtt_data_struct, mqtt_transferring_data_e transfe
         case UPDATE_FW_DATA:
         {
             updatefw_received_data_t *updatefw_data_temp = NULL;
-            uint8_t updatefw_data_buffer[100];
-            memset(updatefw_data_buffer, 0, 100);
 
             updatefw_data_temp = (updatefw_received_data_t *)mqtt_data_struct;
-            sprintf((char *)updatefw_data_buffer, "{\"type\":\"updatefw\",\"serial\":\"002\",\"crc32\":\"%x%x%x%x\"}", updatefw_data_temp->CRC32[0], updatefw_data_temp->CRC32[1], updatefw_data_temp->CRC32[2], updatefw_data_temp->CRC32[3]);
-
-            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
-            {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
-                                             strlen((char *)updatefw_data_buffer), updatefw_data_buffer);
-            }
-
-            if (check_result == _TRUE_)
-            {
-                return_function = true;
-            }
+            sprintf((char *)transmit_data_buffer, "{\"type\":\"updatefw\",\"serial\":\"002\",\"crc32\":\"%x%x%x%x\"}", updatefw_data_temp->CRC32[0], updatefw_data_temp->CRC32[1], updatefw_data_temp->CRC32[2], updatefw_data_temp->CRC32[3]);
 
             break;
         }
@@ -999,6 +924,17 @@ bool MQTT_ACK_To_Server(void *mqtt_data_struct, mqtt_transferring_data_e transfe
 
         default:
             break;
+        }
+
+        while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
+        {
+            check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                         strlen((char *)transmit_data_buffer), transmit_data_buffer);
+        }
+
+        if (check_result == _TRUE_)
+        {
+            return_function = true;
         }
     }
     return return_function;
@@ -1029,6 +965,7 @@ bool MQTT_Get_DateTime(datetime_received_data_t *datetime_received_data, uint32_
                 return return_function;
             }
         }
+        /* Received the data successfully */
         if (MQTT_Get_DataField(MQTT_Response_Server, DataField_Buffer))
         {
             memset((char *)JSON_value, 0, 100);
