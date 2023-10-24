@@ -62,11 +62,11 @@ void EC200_UART_Handler(uint8_t rx_char)
         if (current_application_occur == MQTT_APPLICATION_OCCUR) /* MQTT occurs UART interrupt resource (Always running if FTP application not occur) */
         {
             /* Receive data from Server */
-            if (strstr(EC200_DataProcessing_Array, "+QMTRECV:") != NULL)
+            if (strstr((char *)EC200_DataProcessing_Array, "+QMTRECV:") != NULL)
             {
                 MQTT_received_data_type.Is_Data_From_Server = true;
 
-                memset(MQTT_Response_Server, 0, strlen(MQTT_Response_Server));
+                memset(MQTT_Response_Server, 0, strlen((char *)MQTT_Response_Server));
                 for (int i = 0; i < EC200_preprocessing_data.Upcoming_Data_Count; i++)
                 {
                     MQTT_Response_Server[i] = EC200_DataProcessing_Array[i];
@@ -76,7 +76,7 @@ void EC200_UART_Handler(uint8_t rx_char)
             {
                 MQTT_received_data_type.Is_Data_From_Command = true;
 
-                memset(MQTT_Response_Command, 0, strlen(MQTT_Response_Command));
+                memset(MQTT_Response_Command, 0, strlen((char *)MQTT_Response_Command));
                 for (int i = 0; i < EC200_preprocessing_data.Upcoming_Data_Count; i++)
                 {
                     MQTT_Response_Command[i] = EC200_DataProcessing_Array[i];
@@ -85,11 +85,11 @@ void EC200_UART_Handler(uint8_t rx_char)
         }
         else if (current_application_occur == FTP_APPLICATION_OCCUR) /* FTP occurs UART interrupt resource */
         {
-            if (strstr(EC200_DataProcessing_Array, "\r\nCONNECT\r\n") != NULL)
+            if (strstr((char *)EC200_DataProcessing_Array, "\r\nCONNECT\r\n") != NULL)
             {
                 ftp_output_mode = FTP_DATA_MODE;
                 FTP_preprocessing_data.Upcoming_ServerData_Count = 0;
-                memset(FTP_Response_Server, 0, strlen(FTP_Response_Server));
+                memset(FTP_Response_Server, 0, strlen((char *)FTP_Response_Server));
             }
             else if (ftp_output_mode == FTP_DATA_MODE) /* Receive data from Server */
             {
@@ -106,7 +106,7 @@ void EC200_UART_Handler(uint8_t rx_char)
             {
                 FTP_received_data_type.Is_Data_From_Command = true;
 
-                memset(FTP_Response_Command, 0, strlen(FTP_Response_Command));
+                memset(FTP_Response_Command, 0, strlen((char *)FTP_Response_Command));
                 for (int i = 0; i < EC200_preprocessing_data.Upcoming_Data_Count; i++)
                 {
                     FTP_Response_Command[i] = EC200_DataProcessing_Array[i];
@@ -115,7 +115,7 @@ void EC200_UART_Handler(uint8_t rx_char)
         }
 
         /* Clear unnecessary data in buffer */
-        memset(EC200_DataProcessing_Array, 0, strlen(EC200_DataProcessing_Array));
+        memset(EC200_DataProcessing_Array, 0, strlen((char *)EC200_DataProcessing_Array));
         /* Done of data receiving process */
         EC200_preprocessing_data.Upcoming_Data_Count = 0;
     }

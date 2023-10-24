@@ -49,6 +49,7 @@ typedef enum gpio_state{
 
 #define PULL_UP   	GPIO_PULLUP
 #define PULL_DOWN 	GPIO_PULLDOWN
+#define NO_PULL 		GPIO_NOPULL
 
 typedef struct gpio_pin
 {
@@ -68,6 +69,7 @@ void GPIO_SetPinOut(gpio_port_id port_id, gpio_pin_id pin_id);
 void GPIO_SetPinIn(gpio_port_id port_id, gpio_pin_id pin_id, uint32_t PULLUPDOWN);
 void GPIO_WritePin(gpio_port_id port_id, gpio_pin_id pin_id, gpio_state state);
 gpio_state GPIO_ReadPin(gpio_port_id port_id, gpio_pin_id pin_id);
+void GPIO_TogglePin(gpio_port_id port_id, gpio_pin_id pin_id);
 //void EXTI15_10_IRQHandler_Config(gpio_port_id port_id, gpio_pin_id pin_id, uint32_t mode, uint32_t PULLUPDOWN);
 
 

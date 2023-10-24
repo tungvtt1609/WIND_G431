@@ -66,6 +66,15 @@ void computeDF22_PIcontrollerCoeff(CNTL_2P2Z_F_C_Coeffs *v, float kp, float ki,
     v->Coeff_A2 = 0;
 }
 
+//#define  computeDF22_PIcontrollerCoeff(v, kp, ki,fsw)	\
+//	float temp1;				\
+//    temp1 = ki/(2.0f*fsw);		\
+//    v->Coeff_B0 = kp + temp1;	\
+//    v->Coeff_B1 = temp1 - kp;	\
+//    v->Coeff_B2 = 0;			\
+//    v->Coeff_A1 = 1.0f;			\
+//    v->Coeff_A2 = 0;
+
 //TODO computeDF22_LowPassFLTCoeff()
 void computeDF22_LowPassFLTCoeff(CNTL_2P2Z_F_C_Coeffs *v, float wc,
 		float fsw)

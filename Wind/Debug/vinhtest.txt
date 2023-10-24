@@ -1,0 +1,34 @@
+So lan fail 5 -> 3
+Thoi gian delay giua Power on va reset
+Them time out vao Power on sequence
+timeout 20s -> 10s
+
+
+
+{"serial":"001","type":"battery","batt_status":"2","batt_power":"100.20","batt_volt":"50.50","batt_curr":"10.40","batt_temp":"1"}
+
+
+****************************************
+-Them reset sim counter vao ham trigger reset
+-them state = false vao truong hop het timeout
+- hot plug update
+
+license_number:0130-982-090-6995
+network_license:false
+revocable:false
+product_name:IAR Embedded Workbench for ARM
+product_version:
+license_model_code:PERM
+locking_criteria:8192
+S4%2c7pLvDE2BSZM19fk3
+
+network_license:false
+{"serial":"001","type":"battery","batt_status":"2","batt_power":"100.20","batt_volt":"50.50","batt_curr":"10.40","batt_temp":"1"}
+
+
+****************************************
+-Them reset sim counter vao ham trigger reset
+-them state = false vao truong hop het timeout
+- hot plug update
+-Them reset sim counter vao ham trigger reset
+-them state =

@@ -62,7 +62,7 @@ typedef struct {
  * @param CNTL_2P2Z_F_C_Vars structure with internal & output values.
  * @return CNTL_2P2Z_F_C_Vars Out parameter.
  */
-#define CNTL_2P2Z_F_C(v, k)																	\
+#define CNTL_2P2Z_F_C(v, k)																		\
 		/* Calculate error */																	\
 		k.Errn = k.Ref - k.Fdbk;																\
 		k.OutPresat = (v.Coeff_A2 * k.Out2) + (v.Coeff_A1 * k.Out1) + (v.Coeff_B2 * k.Errn2)	\
@@ -106,8 +106,8 @@ typedef struct {
 		v.Coeff_A2 = 0;							\
 		v.Coeff_A1 = 0;							\
 		/* IMin cannot be lower than -0.9 */	\
-		v.IMin = -0.9;							\
-		v.Max = 1;								\
+		v.IMin = 0;								\
+		v.Max = 1.5;								\
 		v.Min = (0);
 
 

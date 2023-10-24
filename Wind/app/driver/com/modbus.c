@@ -11,8 +11,8 @@
 
 #define RXSIZE          100
 #define TXSIZE          100
-#define RXTIMEOUT       10   //ms
-#define TXTIMEOUT       10   //ms
+#define RXTIMEOUT       500   //ms
+#define TXTIMEOUT       500   //ms
 
 #define MAX_VAR_SHOW        10
 
@@ -25,7 +25,7 @@ typedef struct
 
 typedef struct m_modbus_obj
 {
-	modbus_master_obj modbus;
+	modbus_slave_obj modbus;
     uint8_t rdata[RXSIZE];
     uint8_t sdata[TXSIZE];
     int rcount, tick;
@@ -38,6 +38,9 @@ static DataModBus data_list[MAX_VAR_SHOW];
 
 static int current_index_modbus_dev = 0;
 static m_modbus_obj* modbus_list[MAX_MODBUS_DEV];
+uint8_t read_wind_speed[8] = {0x02,0x03,0x00,0x00,0x00,0x01,0x84,0x39};
+volatile uint32_t read_index;
+
 
 static void ModbusSendData(m_modbus_obj *mb_obj);
 static void ModbusCreateData(m_modbus_obj *mb_obj);
@@ -252,7 +255,7 @@ static void ModbusSetReDe(uint32_t level)
 		Pin_Func_TurnOff(CONTROL_485);
 }
 
-modbus_master_obj* create_modbus(uint16_t id, serial_obj *serial)
+modbus_slave_obj* create_modbus(uint16_t id, serial_obj *serial)
 {
 	if(current_index_modbus_dev >= MAX_MODBUS_DEV)
 	{
@@ -329,7 +332,7 @@ void ModbusBackground(void)
 	}
 }
 
-void ModbusAddVariable(modbus_master_obj *obj, uint16_t addr, void *data, uint16_t len)
+void ModbusAddVariable(modbus_slave_obj *obj, uint16_t addr, void *data, uint16_t len)
 {
     if(current_index_list_var >= MAX_VAR_SHOW) return;
     data_list[current_index_list_var].start_addr = addr;
@@ -337,4 +340,5 @@ void ModbusAddVariable(modbus_master_obj *obj, uint16_t addr, void *data, uint16
     data_list[current_index_list_var].len = len;
     current_index_list_var++;
 }
+
 

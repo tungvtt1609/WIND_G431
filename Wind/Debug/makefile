@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (11.3.rel1)
+# Toolchain: GNU Tools for STM32 (10.3-2021.10)
 ################################################################################
 
 -include ../makefile.init
@@ -14,6 +14,7 @@ RM := rm -rf
 -include app/porting/serial/subdir.mk
 -include app/porting/gpio/subdir.mk
 -include app/porting/adc/subdir.mk
+-include app/lib/EEPROM/subdir.mk
 -include app/lib/EC200_common/subdir.mk
 -include app/lib/subdir.mk
 -include app/driver/measure/subdir.mk
@@ -63,6 +64,9 @@ default.size.stdout \
 OBJDUMP_LIST += \
 Wind.list \
 
+OBJCOPY_HEX += \
+Wind.hex \
+
 OBJCOPY_BIN += \
 Wind.bin \
 
@@ -74,8 +78,8 @@ all: main-build
 main-build: Wind.elf secondary-outputs
 
 # Tool invocations
-Wind.elf Wind.map: $(OBJS) $(USER_OBJS) D:\7.GITHUB\WIND_G431\Wind\STM32G431C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Wind.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\7.GITHUB\WIND_G431\Wind\STM32G431C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Wind.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Wind.elf Wind.map: $(OBJS) $(USER_OBJS) G:\Duchm20\1.Wind_Turbine_Mini\3.Source\Wind_Turbine_1kW\wind_turbine_1kw\Wind\STM32G431C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Wind.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"G:\Duchm20\1.Wind_Turbine_Mini\3.Source\Wind_Turbine_1kW\wind_turbine_1kw\Wind\STM32G431C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Wind.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -89,6 +93,11 @@ Wind.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+Wind.hex: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "Wind.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 Wind.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "Wind.bin"
 	@echo 'Finished building: $@'
@@ -96,10 +105,10 @@ Wind.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 
 # Other Targets
 clean:
-	-$(RM) Wind.bin Wind.elf Wind.list Wind.map default.size.stdout
+	-$(RM) Wind.bin Wind.elf Wind.hex Wind.list Wind.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'

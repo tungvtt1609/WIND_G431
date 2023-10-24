@@ -20,7 +20,7 @@ typedef enum signal_type_e {
 	TEMP1,
 	TEMP2,
 	WIND_SPEED,
-	FREQ,
+//	FREQ,
 	SIGNAL_MAX
 }signal_type_e;
 
@@ -28,6 +28,7 @@ typedef struct adc_signal_type_t {
 	signal_type_e signal_type;
 	ADC_ID_e adc_id;
 	ADC_CH_e adc_ch;
+	uint16_t ADC_Value;
 	float val_control;
 	float *real_value;
 	float offset;
@@ -47,8 +48,10 @@ extern adc_signal_type_t g_signal_value[];
 
 void Signal_Init(void);
 void Signal_Update(signal_type_e signal);
-void Get_All_Signal(void);
-double Get_Vin_Signal_Val(void);
-double Get_Iload_Signal_Val(void);
+void ADC_Temp_Update(signal_type_e signal);
+void Temp_Callback(void);
+
+//void Get_All_Signal(void);
+
 
 #endif /* DRIVER_MEASURE_SIGNAL_H_ */

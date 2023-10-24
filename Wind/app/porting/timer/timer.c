@@ -8,8 +8,9 @@
 #include "timer.h"
 #include "stdbool.h"
 #include "stddef.h"
+#include "lib/EC200_mqtt_application.h"
 
-#define MAX_TIMER_SERVICE					5
+#define MAX_TIMER_SERVICE					7
 
 
 

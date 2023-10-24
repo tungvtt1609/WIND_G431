@@ -60,7 +60,7 @@ typedef enum RANK_e
 
 typedef struct adc_obj_t
 {
-	uint16_t val[4];
+	uint16_t val[5];
 	ADC_ID_e adc_id;
 	uint16_t sample_num;
 	uint16_t ch_num;

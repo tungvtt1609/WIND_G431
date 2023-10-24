@@ -38,7 +38,7 @@ boolean_3_state_e MQTT_SetKeepAlive_Time(uint16_t keepalive_time, uint8_t client
     if (setKeepalive_time_step == 0)
     {
         memset(buff_temp, 0, 50);
-        sprintf(buff_temp, "AT+QMTCFG=\"keepalive\",%d,%d\r", client_id, keepalive_time);
+        sprintf((char *)buff_temp, "AT+QMTCFG=\"keepalive\",%d,%d\r", client_id, keepalive_time);
         EC200_SendCommand(buff_temp);
         setKeepalive_time_step = 1;
     }
@@ -76,7 +76,7 @@ boolean_3_state_e MQTT_Receiving_Mode(uint8_t client_id, uint8_t msg_recv_mode, 
     if (setReceivingMode_step == 0)
     {
         memset(buff_temp, 0, 50);
-        sprintf(buff_temp, "AT+QMTCFG=\"recv/mode\",%d,%d,%d\r", client_id, msg_recv_mode, msg_len_enable);
+        sprintf((char *)buff_temp, "AT+QMTCFG=\"recv/mode\",%d,%d,%d\r", client_id, msg_recv_mode, msg_len_enable);
         EC200_SendCommand(buff_temp);
         setReceivingMode_step = 1;
     }
@@ -114,7 +114,7 @@ boolean_3_state_e MQTT_Open(uint8_t client_id, char *host_name, uint16_t port)
     if (MQTT_open_step == 0)
     {
         memset(buff_temp, 0, 50);
-        sprintf(buff_temp, "AT+QMTOPEN=%d,%s,%d\r", client_id, host_name, port);
+        sprintf((char *)buff_temp, "AT+QMTOPEN=%d,%s,%d\r", client_id, host_name, port);
         EC200_SendCommand(buff_temp);
 
         MQTT_open_step = 1;
@@ -126,16 +126,16 @@ boolean_3_state_e MQTT_Open(uint8_t client_id, char *host_name, uint16_t port)
         {
             /* Case 1: Received full-response */
             memset(buff_temp, 0, 50);
-            sprintf(buff_temp, "\r\nOK\r\n\r\n+QMTOPEN: %d,0\r\n", client_id);
+            sprintf((char *)buff_temp, "\r\nOK\r\n\r\n+QMTOPEN: %d,0\r\n", client_id);
 
             /* Case 2: Received half-response */
             memset(buff_temp1, 0, 30);
-            sprintf(buff_temp1, "\r\n+QMTOPEN: %d,0\r\n", client_id);
+            sprintf((char *)buff_temp1, "\r\n+QMTOPEN: %d,0\r\n", client_id);
             if (EC200_CompareCommand(EC200_Command_Buffer, "\r\nOK\r\n"))
             {
                 /* Do nothing */
             }
-            else if (EC200_CompareCommand(EC200_Command_Buffer, buff_temp) || EC200_CompareCommand(EC200_Command_Buffer, buff_temp1))
+            else if (EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp) || EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp1))
             {
                 return_function = _TRUE_;
                 MQTT_open_step = 0;
@@ -167,7 +167,7 @@ boolean_3_state_e MQTT_Close(uint8_t client_id)
     if (MQTT_close_step == 0)
     {
         memset(buff_temp, 0, 50);
-        sprintf(buff_temp, "AT+QMTCLOSE=%d\r", client_id);
+        sprintf((char *)buff_temp, "AT+QMTCLOSE=%d\r", client_id);
         EC200_SendCommand(buff_temp);
 
         MQTT_close_step = 1;
@@ -179,16 +179,16 @@ boolean_3_state_e MQTT_Close(uint8_t client_id)
         {
             /* Case 1: Received full-response */
             memset(buff_temp, 0, 50);
-            sprintf(buff_temp, "\r\nOK\r\n\r\n+QMTCLOSE: %d,0\r\n", client_id);
+            sprintf((char *)buff_temp, "\r\nOK\r\n\r\n+QMTCLOSE: %d,0\r\n", client_id);
 
             /* Case 2: Received half-response */
             memset(buff_temp1, 0, 30);
-            sprintf(buff_temp1, "\r\n+QMTCLOSE: %d,0\r\n", client_id);
+            sprintf((char *)buff_temp1, "\r\n+QMTCLOSE: %d,0\r\n", client_id);
             if (EC200_CompareCommand(EC200_Command_Buffer, "\r\nOK\r\n"))
             {
                 /* Do nothing */
             }
-            else if (EC200_CompareCommand(EC200_Command_Buffer, buff_temp) || EC200_CompareCommand(EC200_Command_Buffer, buff_temp1))
+            else if (EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp) || EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp1))
             {
                 return_function = _TRUE_;
                 MQTT_close_step = 0;
@@ -220,7 +220,7 @@ boolean_3_state_e MQTT_Connect(uint8_t client_id, char *client_name, char *usern
     if (MQTT_connect_step == 0)
     {
         memset(buff_temp, 0, 200);
-        sprintf(buff_temp, "AT+QMTCONN=%d,%s,%s,%s\r", client_id, client_name, username, password);
+        sprintf((char *)buff_temp, "AT+QMTCONN=%d,%s,%s,%s\r", client_id, client_name, username, password);
         EC200_SendCommand(buff_temp);
 
         MQTT_connect_step = 1;
@@ -232,16 +232,16 @@ boolean_3_state_e MQTT_Connect(uint8_t client_id, char *client_name, char *usern
         {
             /* Case 1: Received full response */
             memset(buff_temp1, 0, 50);
-            sprintf(buff_temp1, "\r\nOK\r\n\r\n+QMTCONN: %d,0,0\r\n", client_id);
+            sprintf((char *)buff_temp1, "\r\nOK\r\n\r\n+QMTCONN: %d,0,0\r\n", client_id);
             /* Case 2: Received half response */
             memset(buff_temp2, 0, 30);
-            sprintf(buff_temp2, "\r\n+QMTCONN: %d,0,0\r\n", client_id);
+            sprintf((char *)buff_temp2, "\r\n+QMTCONN: %d,0,0\r\n", client_id);
 
             if (EC200_CompareCommand(EC200_Command_Buffer, "\r\nOK\r\n"))
             {
                 /* Do nothing */
             }
-            else if (EC200_CompareCommand(EC200_Command_Buffer, buff_temp1) || EC200_CompareCommand(EC200_Command_Buffer, buff_temp2))
+            else if (EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp1) || EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp2))
             {
                 return_function = _TRUE_;
                 MQTT_connect_step = 0;
@@ -274,7 +274,7 @@ boolean_3_state_e MQTT_Disconnect(uint8_t client_id)
     if (MQTT_disconnect_step == 0)
     {
         memset(buff_temp, 0, 30);
-        sprintf(buff_temp, "AT+QMTDISC=%d\r", client_id);
+        sprintf((char *)buff_temp, "AT+QMTDISC=%d\r", client_id);
         EC200_SendCommand(buff_temp);
 
         MQTT_disconnect_step = 1;
@@ -286,16 +286,16 @@ boolean_3_state_e MQTT_Disconnect(uint8_t client_id)
         {
             /* Case 1: Received full response */
             memset(buff_temp1, 0, 50);
-            sprintf(buff_temp1, "\r\nOK\r\n\r\n+QMTDISC: %d,0\r\n", client_id);
+            sprintf((char *)buff_temp1, "\r\nOK\r\n\r\n+QMTDISC: %d,0\r\n", client_id);
             /* Case 2: Received half response */
             memset(buff_temp2, 0, 30);
-            sprintf(buff_temp2, "\r\n+QMTDISC: %d,0\r\n", client_id);
+            sprintf((char *)buff_temp2, "\r\n+QMTDISC: %d,0\r\n", client_id);
 
             if (EC200_CompareCommand(EC200_Command_Buffer, "\r\nOK\r\n"))
             {
                 /* Do nothing */
             }
-            else if (EC200_CompareCommand(EC200_Command_Buffer, buff_temp1) || EC200_CompareCommand(EC200_Command_Buffer, buff_temp2))
+            else if (EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp1) || EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp2))
             {
                 return_function = _TRUE_;
                 MQTT_disconnect_step = 0;
@@ -331,7 +331,7 @@ boolean_3_state_e MQTT_PubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, u
     if (MQTT_pubTopic_step == 0)
     {
         memset(buff_temp, 0, 400);
-        sprintf(buff_temp, "AT+QMTPUBEX=%d,%d,%d,%d,%s,%d\r", client_id, msgid, qos, retain, topic, send_datalength);
+        sprintf((char *)buff_temp, "AT+QMTPUBEX=%d,%d,%d,%d,%s,%d\r", client_id, msgid, qos, retain, topic, send_datalength);
         EC200_SendCommand(buff_temp);
 
         MQTT_pubTopic_step = 1;
@@ -374,16 +374,16 @@ boolean_3_state_e MQTT_PubTopic(uint8_t client_id, uint8_t msgid, uint8_t qos, u
         {
             /* Case 1: Received full response */
             memset(buff_temp1, 0, 50);
-            sprintf(buff_temp1, "\r\nOK\r\n\r\n+QMTPUBEX: %d,%d,0\r\n", client_id, msgid);
+            sprintf((char *)buff_temp1, "\r\nOK\r\n\r\n+QMTPUBEX: %d,%d,0\r\n", client_id, msgid);
             /* Case 2: Received half response */
             memset(buff_temp2, 0, 30);
-            sprintf(buff_temp2, "\r\n+QMTPUBEX: %d,%d,0\r\n", client_id, msgid);
+            sprintf((char *)buff_temp2, "\r\n+QMTPUBEX: %d,%d,0\r\n", client_id, msgid);
 
             if (EC200_CompareCommand(EC200_Command_Buffer, "\r\nOK\r\n"))
             {
                 /* Do nothing */
             }
-            else if (EC200_CompareCommand(EC200_Command_Buffer, buff_temp1) || EC200_CompareCommand(EC200_Command_Buffer, buff_temp2))
+            else if (EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp1) || EC200_CompareCommand(EC200_Command_Buffer, (char *)buff_temp2))
             {
                 return_function = _TRUE_;
                 MQTT_pubTopic_step = 0;
@@ -418,7 +418,7 @@ boolean_3_state_e MQTT_SubTopic(uint8_t client_id, uint8_t msgid, char *topic, u
     {
         memset(buff_temp, 0, 300);
         sprintf(buff_temp, "AT+QMTSUB=%d,%d,%s,%d\r", client_id, msgid, topic, qos);
-        EC200_SendCommand(buff_temp);
+        EC200_SendCommand((uint8_t *)buff_temp);
 
         MQTT_subTopic_step = 1;
     }
@@ -616,12 +616,12 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
             memset(battery_data_buffer, 0, 200);
 
             battery_data_temp = (battery_send_data_t *)mqtt_data_struct;
-            sprintf(battery_data_buffer, "{\"serial\":\"002\",\"type\":\"battery\",\"batt_status\":\"%d\",\"batt_power\":\"%d\",\"batt_volt\":\"%d\",\"batt_curr\":\"%d\"}", battery_data_temp->state, battery_data_temp->power, battery_data_temp->voltage, battery_data_temp->current);
+            sprintf((char *)battery_data_buffer, "{\"serial\":\"002\",\"type\":\"battery\",\"batt_status\":\"%d\",\"batt_power\":\"%d\",\"batt_volt\":\"%d\",\"batt_curr\":\"%d\"}", battery_data_temp->state, battery_data_temp->power, battery_data_temp->voltage, battery_data_temp->current);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
-                                             strlen(battery_data_buffer), battery_data_buffer);
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                             strlen((char *)battery_data_buffer), battery_data_buffer);
             }
 
             if (check_result == _TRUE_)
@@ -639,12 +639,12 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
             memset(wind_data_buffer, 0, 200);
 
             wind_data_temp = (wind_send_data_t *)mqtt_data_struct;
-            sprintf(wind_data_buffer, "{\"serial\":\"002\",\"type\":\"wind\",\"wind_rpm\":\"%d\",\"wind_power\":\"%d\",\"wind_volt\":\"%d\"}", wind_data_temp->speed, wind_data_temp->power, wind_data_temp->voltage);
+            sprintf((char *)wind_data_buffer, "{\"serial\":\"002\",\"type\":\"wind\",\"wind_rpm\":\"%d\",\"wind_power\":\"%d\",\"wind_volt\":\"%d\"}", wind_data_temp->speed, wind_data_temp->power, wind_data_temp->voltage);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
-                                             strlen(wind_data_buffer), wind_data_buffer);
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                             strlen((char *)wind_data_buffer), wind_data_buffer);
             }
 
             if (check_result == _TRUE_)
@@ -662,13 +662,13 @@ bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transfe
             memset(system_data_buffer, 0, 200);
 
             system_data_temp = (system_send_data_t *)mqtt_data_struct;
-            sprintf(system_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\",\"sys_mosfet_temp\":\"%d\",\"gen_speed\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature, system_data_temp->rpm_gen);
+            sprintf((char *)system_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\",\"sys_mosfet_temp\":\"%d\",\"gen_speed\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature, system_data_temp->rpm_gen);
             //            sprintf(system_data_buffer, "{\"serial\":\"002\",\"type\":\"system\",\"sys_status\":\"%d\",\"sys_err_code\":\"%d\",\"sys_total_energy\":\"%d\"}", system_data_temp->controller_state, system_data_temp->error_code, system_data_temp->total_energy, system_data_temp->temperature);
 
             while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
             {
-                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, MQTT_PUB_TOPIC,
-                                             strlen(system_data_buffer), system_data_buffer);
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                             strlen((char *)system_data_buffer), system_data_buffer);
             }
 
             if (check_result == _TRUE_)
@@ -730,6 +730,7 @@ mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data
     mqtt_transferring_data_e return_function = NONE_DATA;
     uint8_t DataField_Buffer[260]; /* Buffer size is 260 due to maximum received size are 255 bytes */
     uint8_t JSON_value[100];
+
     if (MQTT_received_data_type.Is_Data_From_Server == true)
     {
         if (MQTT_Get_DataField(MQTT_Response_Server, DataField_Buffer))
@@ -737,47 +738,59 @@ mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data
             memset((char *)JSON_value, 0, 100);
             if (parse_JSON((char *)DataField_Buffer, "type", (char *)JSON_value))
             {
-                if (strcmp(JSON_value, "battery") == 0)
+                if (strcmp((char *)JSON_value, "battery") == 0)
                 {
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "serial", (char *)JSON_value))
+                    {
+                        battery_data_receive_buffer->serial = atoi((char *)JSON_value);
+                    }
+
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "cap", (char *)JSON_value))
                     {
-                        battery_data_receive_buffer->capacity = atoi(JSON_value);
+                        battery_data_receive_buffer->capacity = atoi((char *)JSON_value);
                     }
 
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "ov_vol", (char *)JSON_value))
                     {
-                        battery_data_receive_buffer->over_voltage = atoi(JSON_value);
+                        battery_data_receive_buffer->over_voltage = atoi((char *)JSON_value);
                     }
 
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "ud_vol", (char *)JSON_value))
                     {
-                        battery_data_receive_buffer->under_voltage = atoi(JSON_value);
+                        battery_data_receive_buffer->under_voltage = atoi((char *)JSON_value);
                     }
 
                     return_function = BATTERY_DATA;
                 }
-                else if (strcmp(JSON_value, "wind") == 0)
+                else if (strcmp((char *)JSON_value, "wind") == 0)
                 {
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "serial", (char *)JSON_value))
+                    {
+                        wind_data_receive_buffer->serial = atoi((char *)JSON_value);
+                    }
+
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "max_vol", (char *)JSON_value))
                     {
-                        wind_data_receive_buffer->max_voltage = atoi(JSON_value);
+                        wind_data_receive_buffer->max_voltage = atoi((char *)JSON_value);
                     }
 
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "max_cur", (char *)JSON_value))
                     {
-                        wind_data_receive_buffer->max_current = atoi(JSON_value);
+                        wind_data_receive_buffer->max_current = atoi((char *)JSON_value);
                     }
 
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     memset((char *)(wind_data_receive_buffer->generator_pole), 0, strlen((char *)(wind_data_receive_buffer->generator_pole)));
                     if (parse_JSON((char *)DataField_Buffer, "pole", (char *)JSON_value))
                     {
-                        for (int i = 0; i < strlen(JSON_value); i++)
+                        for (int i = 0; i < strlen((char *)JSON_value); i++)
                         {
                             wind_data_receive_buffer->generator_pole[i] = JSON_value[i];
                         }
@@ -786,60 +799,297 @@ mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "chrg_vol", (char *)JSON_value))
                     {
-                        wind_data_receive_buffer->start_charging_voltage = atoi(JSON_value);
+                        wind_data_receive_buffer->start_charging_voltage = atoi((char *)JSON_value);
                     }
 
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "max_spd", (char *)JSON_value))
                     {
-                        wind_data_receive_buffer->max_rotate_speed = atoi(JSON_value);
+                        wind_data_receive_buffer->max_rotate_speed = atoi((char *)JSON_value);
                     }
 
                     return_function = WIND_DATA;
                 }
-                else if (strcmp(JSON_value, "system") == 0)
+                else if (strcmp((char *)JSON_value, "system") == 0)
                 {
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
-                    if (parse_JSON((char *)DataField_Buffer, "ov_out_vol", (char *)JSON_value))
+                    if (parse_JSON((char *)DataField_Buffer, "serial", (char *)JSON_value))
                     {
-                        system_data_receive_buffer->over_output_voltage = atoi(JSON_value);
+                        system_data_receive_buffer->serial = atoi((char *)JSON_value);
                     }
 
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
-                    memset((char *)(system_data_receive_buffer->address_controller_modbus), 0, strlen((char *)(system_data_receive_buffer->address_controller_modbus)));
-                    if (parse_JSON((char *)DataField_Buffer, "add_ctler_mdbus", (char *)JSON_value))
+                    if (parse_JSON((char *)DataField_Buffer, "max_vol_out", (char *)JSON_value))
                     {
-                        for (int i = 0; i < strlen(JSON_value); i++)
-                        {
-                            system_data_receive_buffer->address_controller_modbus[i] = JSON_value[i];
-                        }
+                        system_data_receive_buffer->max_voltage_output = atoi((char *)JSON_value);
                     }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "max_cur_out", (char *)JSON_value))
+                    {
+                        system_data_receive_buffer->max_current_output = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "ov_vol_out", (char *)JSON_value))
+                    {
+                        system_data_receive_buffer->over_voltage_output = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "ov_cur_out", (char *)JSON_value))
+                    {
+                        system_data_receive_buffer->over_current_output = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "ov_vol_in", (char *)JSON_value))
+                    {
+                        system_data_receive_buffer->over_voltage_input = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "ov_cur_in", (char *)JSON_value))
+                    {
+                        system_data_receive_buffer->over_current_input = atoi((char *)JSON_value);
+                    }
+                    //                    memset((char *)(system_data_receive_buffer->address_controller_modbus), 0, strlen((char *)(system_data_receive_buffer->address_controller_modbus)));
+                    //                    if (parse_JSON((char *)DataField_Buffer, "add_ctler_mdbus", (char *)JSON_value))
+                    //                    {
+                    //                        for (int i = 0; i < strlen((char *)JSON_value); i++)
+                    //                        {
+                    //                            system_data_receive_buffer->address_controller_modbus[i] = JSON_value[i];
+                    //                        }
+                    //                    }
 
                     return_function = SYSTEM_DATA;
                 }
-                else if (strcmp(JSON_value, "updatefw") == 0)
+                else if (strcmp((char *)JSON_value, "updatefw") == 0)
                 {
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
-                    if (parse_JSON((char *)DataField_Buffer, "flag", (char *)JSON_value))
+                    if (parse_JSON((char *)DataField_Buffer, "serial", (char *)JSON_value))
                     {
-                        updatefw_data_receive_buffer->flag = atoi(JSON_value);
+                        updatefw_data_receive_buffer->serial = atoi((char *)JSON_value);
                     }
 
                     memset((char *)JSON_value, 0, strlen((char *)JSON_value));
                     if (parse_JSON((char *)DataField_Buffer, "crc32", (char *)JSON_value))
                     {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            updatefw_data_receive_buffer->CRC32[i] = JSON_value[i];
-                        }
+                        uint32_t conv_crc32 = 0xFFFFFFFF;
+                        ConverStringCRC32toU32((char *)JSON_value, &conv_crc32);
+                        updatefw_data_receive_buffer->CRC32[0] = (uint8_t)((conv_crc32 >> 24) & 0xff);
+                        updatefw_data_receive_buffer->CRC32[1] = (uint8_t)((conv_crc32 >> 16) & 0xff);
+                        updatefw_data_receive_buffer->CRC32[2] = (uint8_t)((conv_crc32 >> 8) & 0xff);
+                        updatefw_data_receive_buffer->CRC32[3] = (uint8_t)(conv_crc32 & 0xff);
                     }
 
                     return_function = UPDATE_FW_DATA;
                 }
             }
         }
-        memset(MQTT_Response_Server, 0, strlen(MQTT_Response_Server));
+        memset(MQTT_Response_Server, 0, strlen((char *)MQTT_Response_Server));
         MQTT_received_data_type.Is_Data_From_Server = false;
     }
+    return return_function;
+}
+
+bool MQTT_ACK_To_Server(void *mqtt_data_struct, mqtt_transferring_data_e transferring_data_type)
+{
+    bool return_function = false;
+    boolean_3_state_e check_result = _NOT_DEFINE_;
+
+    if (mqtt_data_struct != NULL)
+    {
+        switch (transferring_data_type)
+        {
+        case BATTERY_DATA:
+        {
+            battery_received_data_t *battery_data_temp = NULL;
+            uint8_t battery_data_buffer[200];
+            memset(battery_data_buffer, 0, 200);
+
+            battery_data_temp = (battery_received_data_t *)mqtt_data_struct;
+            sprintf((char *)battery_data_buffer, "{\"type\":\"battery\",\"serial\":\"002\",\"cap\":\"%d\",\"ov_vol\":\"%d\",\"ud_vol\":\"%d\"}", battery_data_temp->capacity, battery_data_temp->over_voltage, battery_data_temp->under_voltage);
+
+            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
+            {
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                             strlen((char *)battery_data_buffer), battery_data_buffer);
+            }
+
+            if (check_result == _TRUE_)
+            {
+                return_function = true;
+            }
+
+            break;
+        }
+
+        case WIND_DATA:
+        {
+            wind_received_data_t *wind_data_temp = NULL;
+            uint8_t wind_data_buffer[200];
+            memset(wind_data_buffer, 0, 200);
+
+            wind_data_temp = (wind_received_data_t *)mqtt_data_struct;
+            sprintf((char *)wind_data_buffer, "{\"type\":\"wind\",\"serial\":\"002\",\"max_vol\":\"%d\",\"max_cur\":\"%d\",\"pole\":\"%s\",\"chrg_vol\":\"%d\",\"max_spd\":\"%d\"}", wind_data_temp->max_voltage, wind_data_temp->max_current, wind_data_temp->generator_pole, wind_data_temp->start_charging_voltage, wind_data_temp->max_rotate_speed);
+
+            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
+            {
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                             strlen((char *)wind_data_buffer), wind_data_buffer);
+            }
+
+            if (check_result == _TRUE_)
+            {
+                return_function = true;
+            }
+
+            break;
+        }
+
+        case SYSTEM_DATA:
+        {
+            system_received_data_t *system_data_temp = NULL;
+            uint8_t system_data_buffer[200];
+            memset(system_data_buffer, 0, 200);
+
+            system_data_temp = (system_received_data_t *)mqtt_data_struct;
+            sprintf((char *)system_data_buffer, "{\"type\":\"system\",\"serial\":\"002\",\"max_vol_out\":\"%d\",\"max_cur_out\":\"%d\",\"ov_vol_out\":\"%d\",\"ov_cur_out\":\"%d\",\"ov_vol_in\":\"%d\",\"ov_cur_in\":\"%d\"}", system_data_temp->max_voltage_output, system_data_temp->max_current_output, system_data_temp->over_voltage_output, system_data_temp->over_current_output, system_data_temp->over_voltage_input, system_data_temp->over_current_input);
+
+            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
+            {
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                             strlen((char *)system_data_buffer), system_data_buffer);
+            }
+
+            if (check_result == _TRUE_)
+            {
+                return_function = true;
+            }
+
+            break;
+        }
+
+        case UPDATE_FW_DATA:
+        {
+            updatefw_received_data_t *updatefw_data_temp = NULL;
+            uint8_t updatefw_data_buffer[100];
+            memset(updatefw_data_buffer, 0, 100);
+
+            updatefw_data_temp = (updatefw_received_data_t *)mqtt_data_struct;
+            sprintf((char *)updatefw_data_buffer, "{\"type\":\"updatefw\",\"serial\":\"002\",\"crc32\":\"%x%x%x%x\"}", updatefw_data_temp->CRC32[0], updatefw_data_temp->CRC32[1], updatefw_data_temp->CRC32[2], updatefw_data_temp->CRC32[3]);
+
+            while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
+            {
+                check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                             strlen((char *)updatefw_data_buffer), updatefw_data_buffer);
+            }
+
+            if (check_result == _TRUE_)
+            {
+                return_function = true;
+            }
+
+            break;
+        }
+
+        case NONE_DATA:
+            break;
+
+        default:
+            break;
+        }
+    }
+    return return_function;
+}
+
+volatile uint32_t wait_datetime;
+bool MQTT_Get_DateTime(datetime_received_data_t *datetime_received_data, uint32_t timeout_ms)
+{
+    bool return_function = false;
+    boolean_3_state_e check_result = _NOT_DEFINE_;
+
+    uint8_t DataField_Buffer[260]; /* Buffer size is 260 due to maximum received size are 255 bytes */
+    uint8_t JSON_value[100];
+
+    while (check_result == _NOT_DEFINE_) /* _NOT_DEFINE_ means that is in progress */
+    {
+        check_result = MQTT_PubTopic(CLIENT_ID, MQTT_MSG_ID, MQTT_QOS_PUB, MQTT_RETAIN, (uint8_t *)MQTT_PUB_TOPIC,
+                                     strlen((char *)"{\"type\":\"datetime\",\"serial\":\"002\"}"), (uint8_t *)"{\"type\":\"datetime\",\"serial\":\"002\"}");
+    }
+    if (check_result == _TRUE_)
+    {
+        wait_datetime = timeout_ms;
+        while (MQTT_received_data_type.Is_Data_From_Server == false)
+        {
+            /* Out of time */
+            if (wait_datetime == 0)
+            {
+                return return_function;
+            }
+        }
+        if (MQTT_Get_DataField(MQTT_Response_Server, DataField_Buffer))
+        {
+            memset((char *)JSON_value, 0, 100);
+            if (parse_JSON((char *)DataField_Buffer, "type", (char *)JSON_value))
+            {
+                if (strcmp((char *)JSON_value, "datetime") == 0)
+                {
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "serial", (char *)JSON_value))
+                    {
+                        datetime_received_data->serial = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "year", (char *)JSON_value))
+                    {
+                        datetime_received_data->year = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "mon", (char *)JSON_value))
+                    {
+                        datetime_received_data->month = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "dat", (char *)JSON_value))
+                    {
+                        datetime_received_data->date = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "hr", (char *)JSON_value))
+                    {
+                        datetime_received_data->hour = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "min", (char *)JSON_value))
+                    {
+                        datetime_received_data->minute = atoi((char *)JSON_value);
+                    }
+
+                    memset((char *)JSON_value, 0, strlen((char *)JSON_value));
+                    if (parse_JSON((char *)DataField_Buffer, "sec", (char *)JSON_value))
+                    {
+                        datetime_received_data->second = atoi((char *)JSON_value);
+                    }
+
+                    return_function = true;
+                }
+            }
+        }
+
+        memset(MQTT_Response_Server, 0, strlen((char *)MQTT_Response_Server));
+        MQTT_received_data_type.Is_Data_From_Server = false;
+    }
+    else if (check_result == _FALSE_)
+    {
+        MQTT_Trigger_SIM_Restart();
+    }
+
     return return_function;
 }

@@ -9,7 +9,7 @@
 #include "string.h"
 
 pTIMER_ADVANCE_EVENT_INT_HANDLE Tim1CCIsr 	= NULL;
-//pTIMER_ADVANCE_EVENT_INT_HANDLE Tim4CCIsr 	= NULL;
+pTIMER_ADVANCE_EVENT_INT_HANDLE Tim8CCIsr 	= NULL;
 pTIMER_ADVANCE_EVENT_INT_HANDLE Tim15CCIsr 	= NULL;
 
 typedef struct timeradvanceTable_t {
@@ -17,9 +17,10 @@ typedef struct timeradvanceTable_t {
 	TIM_TypeDef* timeradvance;
 }timeradvanceTable_t;
 
-static timeradvanceTable_t timeradvanceTable[2] = {
+static timeradvanceTable_t timeradvanceTable[3] = {
 		{TIMER_ADVANCE_ID_1, (TIM_TypeDef*)TIM1},
-		{TIMER_ADVANCE_ID_2, (TIM_TypeDef*)TIM15},
+		{TIMER_ADVANCE_ID_2, (TIM_TypeDef*)TIM8},
+		{TIMER_ADVANCE_ID_3, (TIM_TypeDef*)TIM15},
 };
 
 timer_advance_obj_t* create_advance_timer(TIMER_ADVANCE_ID_E id, uint32_t Frequency){

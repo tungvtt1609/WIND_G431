@@ -3,6 +3,8 @@
 
 #include "EC200_common/EC200_common.h"
 #include "EC200_common/EC200_JSON_parsing.h"
+#include "EEPROM/EEROM24C256.h"
+#include "src/interface.h"
 #include "main.h"
 
 /* MQTT parameters */
@@ -12,16 +14,18 @@
 // #define MQTT_BROKER "broker.mqtt.cool"
 #define MQTT_PORT 53195
 #define MQTT_CLIENT_NAME "abc"
-#define MQTT_USER ""
-#define MQTT_PASSWORD ""
+#define MQTT_USER "admin_vmc"
+#define MQTT_PASSWORD "admin@123"
 #define MQTT_MSG_ID 2
 #define MQTT_QOS_SUB 0 /* If modify QOS, let's check again fixed response from server */
 #define MQTT_QOS_PUB 1 /* If modify QOS, let's check again fixed response from server */
 #define MQTT_RETAIN 0
 
 /* MQTT PUB/SUB topics */
-#define MQTT_PUB_TOPIC "serial_002"
-#define MQTT_SUB_TOPIC "vmc/sub"
+#define MQTT_PUB_TOPIC "serial_002_sub"
+#define MQTT_SUB_TOPIC "serial_002_pub"
+
+#define MQTT_SENDING_PERIOD 5000 /* 5s */
 
 typedef enum
 {
@@ -109,6 +113,7 @@ typedef struct
 /***************** Received data ********************/
 typedef struct
 {
+    uint16_t serial;
     uint16_t capacity;      // cap(Ah)
     uint16_t over_voltage;  // ov_vol(Vol)
     uint16_t under_voltage; // ud_vol(Vol)
@@ -117,6 +122,7 @@ typedef struct
 
 typedef struct
 {
+    uint16_t serial;
     uint16_t max_voltage;            // max_vol(Vol)
     uint16_t max_current;            // max_cur(Ampe)
     char generator_pole[50];         // pole
@@ -126,20 +132,39 @@ typedef struct
 
 typedef struct
 {
-    uint16_t over_output_voltage;       // ov_out_vol(Vol)
-    char address_controller_modbus[50]; // add_ctler_mdbus
+    uint16_t serial;
+    uint16_t max_voltage_output;
+    uint16_t max_current_output;
+    uint16_t over_voltage_output;       // ov_out_vol(Vol)
+    uint16_t over_current_output;
+    uint16_t over_voltage_input;
+    uint16_t over_current_input;
+    //char address_controller_modbus[50]; // add_ctler_mdbus
 } system_received_data_t;
 
 typedef struct
 {
-    uint8_t flag;  // flag
+    uint16_t serial;
     char CRC32[4]; // crc32
 } updatefw_received_data_t;
+
+typedef struct
+{
+    uint16_t serial;
+    uint16_t year; //year
+    uint8_t month; //mon
+    uint8_t date; //dat
+    uint8_t hour; //hr
+    uint8_t minute; //min
+    uint8_t second; //sec
+} datetime_received_data_t;
 
 /********************************************* USER FUNCTIONS ***************************************************/
 void MQTT_Trigger_SIM_Restart(void);
 bool EC200_MQTT_ConnectToServer(void);
 bool MQTT_Transmit_Data(void *mqtt_data_struct, mqtt_transferring_data_e transferring_data_type);
 mqtt_transferring_data_e MQTT_Receive_Data(battery_received_data_t *battery_data_receive_buffer, wind_received_data_t *wind_data_receive_buffer, system_received_data_t *system_data_receive_buffer, updatefw_received_data_t *updatefw_data_receive_buffer);
+bool MQTT_ACK_To_Server(void *mqtt_data_struct, mqtt_transferring_data_e transferring_data_type);
+bool MQTT_Get_DateTime(datetime_received_data_t *datetime_received_data, uint32_t timeout_ms);
 
 #endif /* _EC200_APP_H_ */

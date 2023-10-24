@@ -9,8 +9,8 @@
 #include "main.h"
 #include "lib/EC200_common/EC200_uart.h"
 
-#define USE_FIFO
-
+//#define USE_FIFO
+#define USE_ISR
 // Porting hardware
 // extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
@@ -74,7 +74,7 @@ static bool SendByteUart2(uint8_t byte)
 void SendStringUart2(uint8_t *dat)
 {
 	int i=0;
-	while(dat[i] != null)
+	while(dat[i] != 0)
 	{
 		SendByteUart2(dat[i]);
 		i++;
@@ -141,22 +141,34 @@ static bool ReceiveByteUart3(uint8_t *byte)
 
 /*==================================================================================================================================*/
 
+uint8_t uart_rx[30];
+uint8_t uart_rx_cnt = 0;
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 
-#ifndef USE_FIFO
-	if (huart == &huart3)
-	{
-		fifo *rx = uart_list[1].rx_buf;
-		HAL_UART_Receive_IT(huart, uart3_data_rx_isr_buff, 1);
-		rx->Put(rx, uart3_data_rx_isr_buff);
-		uart_list[1].serial_port.length_received = rx->data_len;
+//#ifndef USE_FIFO
+//	if (huart == &huart3)
+//	{
+//			fifo *rx = uart_list[1].rx_buf;
+//			HAL_UART_Receive_IT(huart, uart3_data_rx_isr_buff, 1);
+//			rx->Put(rx, uart3_data_rx_isr_buff);
+//			uart_list[1].serial_port.length_received = rx->data_len;
+//		return;
+//	}
+//#endif
+
+#ifdef USE_ISR
+	if(huart == &huart3){
+		if (++uart_rx_cnt>=30) uart_rx_cnt=0;
+		HAL_UART_Receive_IT(huart, &uart_rx[uart_rx_cnt], 1);
 		return;
 	}
 #endif
 
 	if (huart == &huart2)
 	{
+
 		EC200_UART_Handler(uart2_data_rx_isr_buff[0]);
 		HAL_UART_Receive_IT(huart, uart2_data_rx_isr_buff, 1);
 	}
@@ -186,7 +198,9 @@ void SerialHandle(serial_obj *serial)
 	uint8_t data;
 	bool ret;
 	fifo *tx = uart_list[serial->port].tx_buf;
+#ifdef USE_FIFO
 	fifo *rx = uart_list[serial->port].rx_buf;
+#endif
 send:
 	if (tx->data_len > 0)
 	{
@@ -198,6 +212,7 @@ send:
 			goto send;
 		}
 	}
+
 #ifdef USE_FIFO
 read:
 	if (uart_list[serial->port].ReceiveByte(&data) == true)

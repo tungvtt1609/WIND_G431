@@ -71,8 +71,8 @@ bool EC200_ReceiveCommand(uint8_t *receiv_command_buffer)
         if (MQTT_received_data_type.Is_Data_From_Command == true)
         {
             // memset(receiv_command_buffer, 0, RECEIVE_SIZE);
-            memset(receiv_command_buffer, 0, strlen(receiv_command_buffer));
-            while (MQTT_Response_Command[index] != NULL)
+            memset(receiv_command_buffer, 0, strlen((char *)receiv_command_buffer));
+            while (MQTT_Response_Command[index] != 0)
             {
                 receiv_command_buffer[index] = MQTT_Response_Command[index];
                 index++;
@@ -89,8 +89,8 @@ bool EC200_ReceiveCommand(uint8_t *receiv_command_buffer)
         if (FTP_received_data_type.Is_Data_From_Command == true)
         {
             // memset(receiv_command_buffer, 0, RECEIVE_SIZE);
-            memset(receiv_command_buffer, 0, strlen(receiv_command_buffer));
-            while (FTP_Response_Command[index] != NULL)
+            memset(receiv_command_buffer, 0, strlen((char *)receiv_command_buffer));
+            while (FTP_Response_Command[index] != 0)
             {
                 receiv_command_buffer[index] = FTP_Response_Command[index];
                 index++;
@@ -144,7 +144,7 @@ boolean_3_state_e OffEcho(void)
 
     if (offEcho_step == 0)
     {
-        EC200_SendCommand("ATE0\r");
+        EC200_SendCommand((uint8_t *)"ATE0\r");
         offEcho_step = 1;
     }
     else if (offEcho_step == 1)
@@ -227,8 +227,15 @@ bool EC200_SIM_Start(void)
 }
 
 extern uint32_t sending_period;
+extern volatile uint32_t wait_datetime;
 void EC200_Time_Base_1ms(void)
 {
+    //	static int blink_led = 0;
+    //	blink_led++;
+    //	if(blink_led >= 100){
+    //		blink_led = 0;
+    //		Pin_Func_Toggle(LED3);
+    //	}
     if (enable_timeout == true)
     {
         if (ec200_timeout > 0)
@@ -250,5 +257,9 @@ void EC200_Time_Base_1ms(void)
     if (sending_period > 0)
     {
         sending_period--;
+    }
+    if (wait_datetime > 0)
+    {
+        wait_datetime--;
     }
 }

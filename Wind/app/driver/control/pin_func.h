@@ -17,8 +17,11 @@ typedef enum pin_func_id_e
 	LED3,
 	BUZZ,
 	CONTROL_485,
-    RESET_4G,
-    POWER_4G,
+	RELAY1,
+	RELAY2,
+	RESET_4G,
+	POWER_4G,
+	FREQ,
     PIN_FUNC_MAX
 } pin_func_id_e;
 

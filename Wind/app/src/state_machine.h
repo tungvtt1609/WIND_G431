@@ -23,14 +23,12 @@ typedef FUNCTION_RETURN (*FnCheck)();
 
 typedef enum {
 	STATE_WIND_OFF 			= 0,
-//	STATE_CHECK_ERR			,
+	STATE_FORWARD_XYLANH		,
 	STATE_CHECK_WIND		,
-//	STATE_CHECK_BOOST		,
 	STATE_CLOSE_LOOP		,
 	STATE_RESET				,
 	STATE_ERR				,
-//	STATE_ALL				,
-	STATE_MAX
+	STATE_ALL				,
 }STATE_MACHINE_ID;
 
 extern STATE_MACHINE_ID 	g_current_state;
